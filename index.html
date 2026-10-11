@@ -32,10 +32,9 @@
   --bg:#0D1310; --surface:#151D18; --fg:#E6EBE4; --muted:#98A59C; --line:#29342D;
   --hof-bg:#CDAE55; --hof-fg:#1C160A; color-scheme:dark;
 }
-/* Phones: the whole rack wraps into rows of 13 so every jersey is on screen at once */
+/* Phones: same single rack as desktop, sized so the picked jersey and a handful of others fit */
 @media (max-width:640px){
-  :root{ --head-h:146px; --space:60px; --row-gap:12px;
-    --cell:calc((100vw - 32px - 2 * var(--inset)) / 13); --jw:calc(var(--cell) * 4.1); }
+  :root{ --jw:150px; --head-h:146px; --space:60px; }
 }
 
 *{box-sizing:border-box}
@@ -203,7 +202,6 @@ button{font:inherit; color:inherit}
   .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
   .card-body{grid-template-columns:1fr}
 }
-.now-jersey{display:none}
 .yrs-inline{display:none}
 
 @media (max-width:640px){
@@ -213,24 +211,12 @@ button{font:inherit; color:inherit}
   .sub{font-size:14px; letter-spacing:.03em}
   .kicker{font-size:11.5px; letter-spacing:.2em}
 
-  /* rack: rows of side-on jerseys, one rail per row (the crossbar is the first) */
-  .track{height:auto; overflow:visible; -webkit-mask-image:none; mask-image:none}
-  .rack-inner{width:auto; height:auto; padding-inline:0; flex-wrap:wrap; justify-content:center; row-gap:var(--row-gap);
-    background:linear-gradient(180deg, transparent calc(var(--jw) * .033), var(--post-hi) calc(var(--jw) * .033),
-      var(--post) calc(var(--jw) * .058), var(--post-lo) calc(var(--jw) * .084), transparent calc(var(--jw) * .084))
-      0 0 / 100% calc(var(--jw) * 1.0667 + var(--row-gap)) repeat-y}
-  .slot, .slot[aria-selected="true"]{flex:0 0 calc(100% / 13); height:calc(var(--jw) * 1.0667); transition:none}
-  .slot .back{display:none}
-  .slot .side, .slot[aria-selected="true"] .side{opacity:1; transform:none; transition:transform .25s ease, filter .25s ease}
-  .slot[aria-selected="true"] .side{transform:scale(1.16); filter:drop-shadow(0 0 5px rgba(255,236,170,.95))}
-  .slot:focus-visible{outline-offset:1px}
-
-  /* the picked jersey turns around between Prev and Next */
-  .controls{margin-top:14px; gap:6px; align-items:end}
-  .now-jersey{display:block; width:min(150px, 42vw); margin:0 auto -4px}
-  .now-jersey svg{display:block; width:100%; height:auto; overflow:visible; filter:drop-shadow(0 12px 10px rgba(0,0,0,.4))}
-  .now-jersey.swing svg{transform-origin:50% 5.47%; animation:swing 1.3s cubic-bezier(.3,.6,.3,1)}
-  .pill{padding:8px 12px; font-size:12.5px; letter-spacing:.1em; margin-bottom:6px}
+  /* rack: the picked jersey sits at the left edge, the rest trail off to the right */
+  .rack-inner{padding-inline:4px 24px}
+  .track{-webkit-mask-image:linear-gradient(90deg, #000 calc(100% - 30px), transparent);
+          mask-image:linear-gradient(90deg, #000 calc(100% - 30px), transparent)}
+  .controls{gap:8px}
+  .pill{padding:8px 12px; font-size:12.5px; letter-spacing:.1em}
   .now-name{font-size:18px}
   .now-meta{font-size:12px; letter-spacing:.08em}
 
@@ -275,7 +261,7 @@ button{font:inherit; color:inherit}
 
     <div class="controls">
       <button class="pill" id="prev" type="button" aria-label="Previous jersey"><span aria-hidden="true">←</span> Prev</button>
-      <div class="now"><div class="now-jersey" id="now-jersey" aria-hidden="true"></div><span class="now-name" id="now-name"></span><span class="now-meta" id="now-meta"></span></div>
+      <div class="now"><span class="now-name" id="now-name"></span><span class="now-meta" id="now-meta"></span></div>
       <button class="pill" id="next" type="button" aria-label="Next jersey">Next <span aria-hidden="true">→</span></button>
     </div>
 
@@ -1207,7 +1193,6 @@ const nowName = document.getElementById('now-name');
 const nowMeta = document.getElementById('now-meta');
 const reduce = matchMedia('(prefers-reduced-motion: reduce)');
 const phone = matchMedia('(max-width: 640px)');
-const nowJersey = document.getElementById('now-jersey');
 
 rack.innerHTML = P.map((p, i) => `
   <button class="slot" type="button" role="tab" id="tab-${p.id}" aria-controls="facts" aria-selected="false" tabindex="-1"
@@ -1287,12 +1272,13 @@ function renderCard(p){
 }
 
 function center(i, smooth){
-  if (phone.matches){ track.scrollLeft = 0; return; }   // the phone rack wraps, nothing to scroll
   const jw = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--jw'));
   const C = jw * .19, O = jw + 14;
   const pad = parseFloat(getComputedStyle(rack).paddingLeft);
   const total = pad * 2 + (N - 1) * C + O, W = track.clientWidth;
-  const x = total <= W ? 0 : Math.max(0, Math.min(pad + i * C + O / 2 - W / 2, total - W));
+  // desktop centers the pick; phones park it at the left edge with a sliver of the previous jersey
+  const want = phone.matches ? pad + i * C - C * .6 : pad + i * C + O / 2 - W / 2;
+  const x = total <= W ? 0 : Math.max(0, Math.min(want, total - W));
   track.scrollTo({ left: x, behavior: smooth && !reduce.matches ? 'smooth' : 'auto' });
 }
 
@@ -1310,17 +1296,11 @@ function select(i, { focus = false, smooth = true } = {}){
   nowName.textContent = `${p.first} ${p.last}`;
   nowMeta.textContent = `#${p.num} · ${p.team} · ${String(cur + 1).padStart(2, '0')} / ${N}`;
   renderCard(p);
-  nowJersey.innerHTML = backSVG(p, 'f');
-  nowJersey.classList.remove('swing'); void nowJersey.offsetWidth; nowJersey.classList.add('swing');
   if (focus) slots[cur].focus({ preventScroll: true });
   center(cur, smooth);
 }
 
-slots.forEach((s, i) => s.addEventListener('click', () => {
-  if (i !== cur) select(i);
-  // on phones, bring the turned-around jersey into view under the rack
-  if (phone.matches) document.querySelector('.controls').scrollIntoView({ behavior: reduce.matches ? 'auto' : 'smooth', block: 'center' });
-}));
+slots.forEach((s, i) => s.addEventListener('click', () => { if (i !== cur) select(i); }));
 rack.addEventListener('keydown', e => {
   const map = { ArrowRight: cur + 1, ArrowLeft: cur - 1, Home: 0, End: N - 1 };
   if (e.key in map){ e.preventDefault(); select(map[e.key], { focus: true }); }

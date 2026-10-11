@@ -175,6 +175,23 @@ button{font:inherit; color:inherit}
 .chip{border:1px solid var(--line); border-radius:999px; padding:6px 13px; font-family:var(--f-cond); font-weight:600; font-size:15.5px; letter-spacing:.03em; line-height:1.2}
 .chip.hof{background:var(--hof-bg); color:var(--hof-fg); border-color:transparent}
 
+.splits{padding:24px clamp(18px,3vw,34px) 6px; border-bottom:1px solid var(--line)}
+.splits h3{margin:0 0 10px; display:flex; flex-wrap:wrap; align-items:baseline; gap:4px 12px;
+  font-family:var(--f-cond); font-weight:700; font-size:13px; letter-spacing:.18em; text-transform:uppercase; color:var(--muted)}
+.splits h3 span{font-weight:500; letter-spacing:.08em; text-transform:none; font-size:14px}
+.split-scroll{overflow-x:auto; margin-inline:-6px; padding-inline:6px}
+.splits table{width:100%; min-width:440px; border-collapse:collapse; font-variant-numeric:tabular-nums}
+.splits th,.splits td{padding:10px 12px; text-align:right; white-space:nowrap; border-bottom:1px solid var(--line)}
+.splits thead th{padding-top:6px; font-family:var(--f-cond); font-weight:600; font-size:12.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted)}
+.splits th:first-child,.splits .yrs{text-align:left}
+.splits tbody th{font-family:var(--f-cond); font-weight:700; font-size:17.5px; letter-spacing:.02em}
+.splits td{font-size:16px}
+.splits td.yrs{color:var(--muted); font-size:14.5px}
+.splits tr.is-jersey th{box-shadow:inset 4px 0 0 var(--team-line); padding-left:16px}
+.splits tr.is-jersey td:not(.yrs){font-weight:600}
+.splits tbody tr:last-child th,.splits tbody tr:last-child td{border-bottom:0}
+.splits tfoot th,.splits tfoot td{border-top:2px solid var(--fg); border-bottom:0; font-weight:700}
+
 .note{margin:0; font-size:13.5px; color:var(--muted); max-width:70ch}
 
 @media (max-width:820px){
@@ -209,7 +226,7 @@ button{font:inherit; color:inherit}
     <div class="goalpost" aria-hidden="true"><i class="upright l"></i><i class="upright r"></i><i class="crossbar"></i></div>
 
     <header class="top">
-      <p class="kicker">Throwback rack · 35 jerseys</p>
+      <p class="kicker">Throwback rack · 50 jerseys</p>
       <h1 class="logo" id="logo">Legends</h1>
       <p class="sub">Tap any jersey to turn it around and see the player card below.</p>
     </header>
@@ -232,7 +249,7 @@ button{font:inherit; color:inherit}
     <div class="card-inner" id="card"></div>
   </section>
 
-  <p class="note">Fan-made tribute, not affiliated with the NFL or any club. Jerseys are drawn from photos of each team’s uniforms, without team logos. Stats are regular-season career totals unless the label says otherwise.</p>
+  <p class="note">Fan-made tribute, not affiliated with the NFL or any club. Jerseys are drawn from photos of each team’s uniforms, without team logos. Stats are regular-season totals through the 2025 season unless a label says otherwise; the by-team tables come from ESPN’s season-by-season records.</p>
 </main>
 
 <script>
@@ -250,6 +267,26 @@ const EAGLES = { body:'#00535C', collar:'#141414', font:'cut', sx:.86,
 const SEAHAWKS = { body:'#0D2449', collar:'#0D2449', trim:'#69BE28', font:'cut', sx:.9,
   num:{fill:'#FFFFFF', outlines:[{c:'#A5ACAF', w:2.2}]}, name:{fill:'#FFFFFF', outlines:[{c:'#A5ACAF', w:.8}]},
   stripes:{start:3, list:[{c:'#69BE28',w:3},{c:'body',w:2},{c:'#A5ACAF',w:2}]} };
+const COWBOYS = { body:'#15295B', collar:'#15295B', trim:'#FFFFFF', font:'round', sx:.9,
+  num:{fill:'#FFFFFF', outlines:[{c:'#8C9DB8', w:2.6}]}, name:{fill:'#FFFFFF', outlines:[{c:'#8C9DB8', w:.8}]},
+  stripes:{start:7, list:[{c:'#FFFFFF',w:3.5},{c:'body',w:3},{c:'#FFFFFF',w:3.5}]} };
+const COLTS = { body:'#1F4F9F', collar:'#1F4F9F', trim:'#FFFFFF', font:'round', sx:.88,
+  num:{fill:'#FFFFFF'}, name:{fill:'#FFFFFF'}, shoulderStripes:'#FFFFFF' };
+const GIANTS = { body:'#1A3F92', collar:'#1A3F92', trim:'#C8102E', font:'round', sx:.92, num:{fill:'#FFFFFF'}, name:{fill:'#FFFFFF'} };
+const FALCONS_RED = { body:'#C9202F', collar:'#141414', font:'cut', sx:.8,
+  num:{fill:'#FFFFFF', outlines:[{c:'#141414', w:3}]}, name:{fill:'#FFFFFF', outlines:[{c:'#141414', w:1}]},
+  stripes:{start:0, list:[{c:'#141414',w:8},{c:'#FFFFFF',w:2}]}, sides:{c:'#141414', top:6, w:16, pipe:'#FFFFFF'} };
+const FALCONS_BLACK = { body:'#161616', collar:'#161616', trim:'#A71930', font:'cut', sx:.8,
+  num:{fill:'#FFFFFF', outlines:[{c:'#A71930', w:3}]}, name:{fill:'#FFFFFF', outlines:[{c:'#A71930', w:1}]} };
+const PACKERS = { body:'#203731', collar:'#FFB612', font:'round', sx:.9,
+  num:{fill:'#FFFFFF'}, name:{fill:'#FFFFFF'},
+  stripes:{start:6, list:[{c:'#FFB612',w:4},{c:'#FFFFFF',w:3},{c:'#FFB612',w:4}]} };
+const WASHINGTON = { body:'#6F1A2C', collar:'#6F1A2C', trim:'#FFB612', font:'round', sx:.9,
+  num:{fill:'#FFFFFF', outlines:[{c:'#FFB612', w:2.6}]}, name:{fill:'#FFFFFF'},
+  stripes:{start:6, list:[{c:'#FFFFFF',w:2.5},{c:'#FFB612',w:5},{c:'#FFFFFF',w:2.5}]} };
+const BRONCOS_ORANGE = { body:'#F65A1F', collar:'#0A2240', font:'cut', sx:.9,
+  num:{fill:'#FFFFFF', outlines:[{c:'#0A2240', w:3.2}]}, name:{fill:'#FFFFFF', outlines:[{c:'#0A2240', w:1.1}]},
+  sides:{c:'#0A2240', top:3, w:26, pipe:'#FFFFFF'}, under:'#0A2240' };
 const STEELERS = { body:'#141414', collar:'#141414', trim:'#FFB612', font:'round', sx:.84,
   num:{fill:'#FFFFFF'}, name:{fill:'#FFB612'},
   stripes:{start:4, list:[{c:'#FFB612',w:5},{c:'#FFFFFF',w:1.5},{c:'body',w:2},{c:'#FFFFFF',w:1.5},{c:'#FFB612',w:5},{c:'#FFFFFF',w:1.5},{c:'body',w:2},{c:'#FFFFFF',w:1.5},{c:'#FFB612',w:5}]} };
@@ -310,8 +347,7 @@ const P = [
 
   { id:'peyton-manning', first:'Peyton', last:'Manning', back:'MANNING', num:'18', pos:'Quarterback', team:'Indianapolis Colts', years:'1998–2011', nick:'The Sheriff',
     college:'Tennessee', draft:'1998 · Rd 1, No. 1', kitName:'Royal blue home',
-    kit:{ body:'#1F4F9F', collar:'#1F4F9F', trim:'#FFFFFF', font:'round', sx:.88,
-      num:{fill:'#FFFFFF'}, name:{fill:'#FFFFFF'}, shoulderStripes:'#FFFFFF' },
+    kit:COLTS,
     stats:[['5','MVP awards'],['71,940','Passing yards'],['539','Passing TDs'],['2','Super Bowl titles']],
     facts:[
       'Won a record five MVP awards, four of them with the Colts.',
@@ -347,7 +383,7 @@ const P = [
 
   { id:'eli-manning', first:'Eli', last:'Manning', back:'MANNING', num:'10', pos:'Quarterback', team:'New York Giants', years:'2004–2019',
     college:'Ole Miss', draft:'2004 · Rd 1, No. 1', kitName:'Dark blue home',
-    kit:{ body:'#1A3F92', collar:'#1A3F92', trim:'#C8102E', font:'round', sx:.92, num:{fill:'#FFFFFF'}, name:{fill:'#FFFFFF'} },
+    kit:GIANTS,
     stats:[['2','Super Bowl MVPs'],['57,023','Passing yards'],['366','Passing TDs'],['210','Straight starts']],
     facts:[
       'Beat the Patriots in Super Bowls XLII and XLVI and was MVP of both. The first one ended New England’s bid for a 19–0 season.',
@@ -373,9 +409,7 @@ const P = [
 
   { id:'cutler', first:'Jay', last:'Cutler', back:'CUTLER', num:'6', pos:'Quarterback', team:'Denver Broncos', years:'2006–2008',
     college:'Vanderbilt', draft:'2006 · Rd 1, No. 11', kitName:'Orange alternate', ink:'#0A2240',
-    kit:{ body:'#F65A1F', collar:'#0A2240', font:'cut', sx:.9,
-      num:{fill:'#FFFFFF', outlines:[{c:'#0A2240', w:3.2}]}, name:{fill:'#FFFFFF', outlines:[{c:'#0A2240', w:1.1}]},
-      sides:{c:'#0A2240', top:3, w:26, pipe:'#FFFFFF'}, under:'#0A2240' },
+    kit:BRONCOS_ORANGE,
     stats:[['35,133','Passing yards'],['227','Passing TDs'],['4,526','Yards in 2008'],['1','Pro Bowl']],
     facts:[
       'Threw for 4,526 yards in 2008, a Broncos single-season record at the time, and made the Pro Bowl.',
@@ -387,8 +421,7 @@ const P = [
 
   { id:'julio', first:'Julio', last:'Jones', back:'JONES', num:'11', pos:'Wide receiver', team:'Atlanta Falcons', years:'2011–2020',
     college:'Alabama', draft:'2011 · Rd 1, No. 6', kitName:'Black home',
-    kit:{ body:'#161616', collar:'#161616', trim:'#A71930', font:'cut', sx:.8,
-      num:{fill:'#FFFFFF', outlines:[{c:'#A71930', w:3}]}, name:{fill:'#FFFFFF', outlines:[{c:'#A71930', w:1}]} },
+    kit:FALCONS_BLACK,
     stats:[['914','Receptions'],['13,703','Receiving yards'],['66','Receiving TDs'],['300','Yards in one game']],
     facts:[
       'Caught 12 passes for 300 yards against Carolina in October 2016.',
@@ -487,9 +520,7 @@ const P = [
 
   { id:'owens', first:'Terrell', last:'Owens', back:'OWENS', num:'81', pos:'Wide receiver', team:'Dallas Cowboys', years:'2006–2008', nick:'T.O.',
     college:'Chattanooga', draft:'1996 · Rd 3, No. 89', kitName:'Navy blue',
-    kit:{ body:'#15295B', collar:'#15295B', trim:'#FFFFFF', font:'round', sx:.9,
-      num:{fill:'#FFFFFF', outlines:[{c:'#8C9DB8', w:2.6}]}, name:{fill:'#FFFFFF', outlines:[{c:'#8C9DB8', w:.8}]},
-      stripes:{start:7, list:[{c:'#FFFFFF',w:3.5},{c:'body',w:3},{c:'#FFFFFF',w:3.5}]} },
+    kit:COWBOYS,
     stats:[['1,078','Receptions'],['15,934','Receiving yards'],['153','Receiving TDs'],['38','TD catches in Dallas']],
     facts:[
       'Ranks third in NFL history in both receiving yards and receiving touchdowns.',
@@ -591,9 +622,7 @@ const P = [
 
   { id:'nelson', first:'Jordy', last:'Nelson', back:'NELSON', num:'87', pos:'Wide receiver', team:'Green Bay Packers', years:'2008–2017',
     college:'Kansas State', draft:'2008 · Rd 2, No. 36', kitName:'Green home',
-    kit:{ body:'#203731', collar:'#FFB612', font:'round', sx:.9,
-      num:{fill:'#FFFFFF'}, name:{fill:'#FFFFFF'},
-      stripes:{start:6, list:[{c:'#FFB612',w:4},{c:'#FFFFFF',w:3},{c:'#FFB612',w:4}]} },
+    kit:PACKERS,
     stats:[['613','Receptions'],['8,587','Receiving yards'],['72','Receiving TDs'],['1,519','Yards in 2014']],
     facts:[
       'Set the Packers’ single-season record with 1,519 receiving yards in 2014.',
@@ -643,9 +672,7 @@ const P = [
 
   { id:'ryan', first:'Matt', last:'Ryan', back:'RYAN', num:'2', pos:'Quarterback', team:'Atlanta Falcons', years:'2008–2021', nick:'Matty Ice',
     college:'Boston College', draft:'2008 · Rd 1, No. 3', kitName:'Red alternate',
-    kit:{ body:'#C9202F', collar:'#141414', font:'cut', sx:.8,
-      num:{fill:'#FFFFFF', outlines:[{c:'#141414', w:3}]}, name:{fill:'#FFFFFF', outlines:[{c:'#141414', w:1}]},
-      stripes:{start:0, list:[{c:'#141414',w:8},{c:'#FFFFFF',w:2}]}, sides:{c:'#141414', top:6, w:16, pipe:'#FFFFFF'} },
+    kit:FALCONS_RED,
     stats:[['62,792','Passing yards'],['381','Passing TDs'],['59,735','Yards as a Falcon'],['4','Pro Bowls']],
     facts:[
       'Won NFL MVP in 2016 and led Atlanta to Super Bowl LI.',
@@ -697,9 +724,7 @@ const P = [
 
   { id:'portis', first:'Clinton', last:'Portis', back:'PORTIS', num:'26', pos:'Running back', team:'Washington Redskins', years:'2004–2010',
     college:'Miami', draft:'2002 · Rd 2, No. 51', kitName:'Burgundy home',
-    kit:{ body:'#6F1A2C', collar:'#6F1A2C', trim:'#FFB612', font:'round', sx:.9,
-      num:{fill:'#FFFFFF', outlines:[{c:'#FFB612', w:2.6}]}, name:{fill:'#FFFFFF'},
-      stripes:{start:6, list:[{c:'#FFFFFF',w:2.5},{c:'#FFB612',w:5},{c:'#FFFFFF',w:2.5}]} },
+    kit:WASHINGTON,
     stats:[['9,923','Rushing yards'],['75','Rushing TDs'],['6,824','Rush yards in Washington'],['1,516','Yards in 2005']],
     facts:[
       'Washington got him from Denver in 2004 in a trade for cornerback Champ Bailey.',
@@ -707,7 +732,193 @@ const P = [
       'Finished second in team rushing history, 648 yards behind John Riggins.',
       'Showed up to press conferences in costume as characters he invented.'
     ],
-    honors:['2002 Offensive Rookie of the Year','2× Pro Bowl'] }
+    honors:['2002 Offensive Rookie of the Year','2× Pro Bowl'] },
+
+  { id:'elliott', first:'Ezekiel', last:'Elliott', back:'ELLIOTT', num:'21', pos:'Running back', team:'Dallas Cowboys', years:'2016–2022, 2024', nick:'Zeke',
+    college:'Ohio State', draft:'2016 · Rd 1, No. 4', kitName:'Navy blue',
+    kit:COWBOYS,
+    stats:[['1,631','Yards in 2016'],['2','Rushing titles'],['8,488','Rush yards as a Cowboy'],['3','Pro Bowls']],
+    facts:[
+      'Led the NFL with 1,631 rushing yards as a rookie in 2016, a Cowboys rookie record.',
+      'Won a second rushing title in 2018 with 1,434 yards.',
+      'Ranks third in Cowboys history in rushing yards and rushing touchdowns, behind Emmitt Smith and Tony Dorsett.',
+      'Taken fourth overall out of Ohio State in 2016.'
+    ],
+    honors:['2× rushing champion','2016 first-team All-Pro','3× Pro Bowl'] },
+
+  { id:'aj-green', first:'A.J.', last:'Green', back:'GREEN', num:'18', pos:'Wide receiver', team:'Cincinnati Bengals', years:'2011–2020',
+    college:'Georgia', draft:'2011 · Rd 1, No. 4', kitName:'Orange alternate', ink:'#141414',
+    kit:{ body:'#FB4F14', collar:'#141414', font:'cut', sx:.86,
+      num:{fill:'#141414', outlines:[{c:'#FFFFFF', w:3}]}, name:{fill:'#141414'},
+      sleeve:'#141414', tiger:'#FB4F14', sides:{c:'#FFFFFF', top:3, w:14, pipe:'#141414'} },
+    stats:[['727','Receptions'],['10,514','Receiving yards'],['70','Receiving TDs'],['7','Pro Bowls']],
+    facts:[
+      'Made the Pro Bowl in each of his first seven seasons.',
+      'Ranks second in Bengals history in catches, receiving yards and touchdown catches, behind Chad Johnson.',
+      'Taken fourth overall out of Georgia in 2011.',
+      'Caught a 77-yard touchdown in his final NFL game.'
+    ],
+    honors:['7× Pro Bowl'] },
+
+  { id:'bell', first:'Le’Veon', last:'Bell', back:'BELL', num:'26', pos:'Running back', team:'Pittsburgh Steelers', years:'2013–2017',
+    college:'Michigan State', draft:'2013 · Rd 2, No. 48', kitName:'Black home',
+    kit:STEELERS,
+    stats:[['6,554','Rushing yards'],['399','Receptions'],['236','Yards in one game'],['2,215','Scrimmage yds in 2014']],
+    facts:[
+      'Ran for 236 yards against Buffalo in December 2016, the Steelers’ single-game record.',
+      'Piled up 2,215 yards from scrimmage in 2014.',
+      'Led the NFL with 321 carries in 2017 and set the Steelers’ record for catches by a running back with 85.',
+      'Sat out the 2018 season in a contract dispute.'
+    ],
+    honors:['2× first-team All-Pro','3× Pro Bowl'] },
+
+  { id:'chris-johnson', first:'Chris', last:'Johnson', back:'JOHNSON', num:'28', pos:'Running back', team:'Tennessee Titans', years:'2008–2013', nick:'CJ2K',
+    college:'East Carolina', draft:'2008 · Rd 1, No. 24', kitName:'Light blue alternate', ink:'#0C2340',
+    kit:{ body:'#6CA7DD', collar:'#0C2340', font:'cut', sx:.88,
+      num:{fill:'#FFFFFF', outlines:[{c:'#0C2340', w:2.6},{c:'#C8102E', w:1.4}]}, name:{fill:'#0C2340'},
+      yoke:{c:'#0C2340', pipe:'#C8102E'} },
+    stats:[['9,651','Rushing yards'],['2,006','Yards in 2009'],['2,509','Scrimmage yds in 2009'],['3','Pro Bowls']],
+    facts:[
+      'Ran for 2,006 yards in 2009, the sixth 2,000-yard rushing season in NFL history.',
+      'His 2,509 yards from scrimmage that year are still the NFL single-season record.',
+      'Ran a 4.24 40-yard dash at the 2008 combine, then the fastest on record.'
+    ],
+    honors:['2009 Offensive Player of the Year','2009 first-team All-Pro','3× Pro Bowl'] },
+
+  { id:'beckham', first:'Odell', last:'Beckham Jr.', back:'BECKHAM JR', num:'13', pos:'Wide receiver', team:'New York Giants', years:'2014–2018', nick:'OBJ',
+    college:'LSU', draft:'2014 · Rd 1, No. 12', kitName:'Dark blue home',
+    kit:GIANTS,
+    stats:[['390','Catches as a Giant'],['5,476','Yards as a Giant'],['44','TDs as a Giant'],['3','Pro Bowls']],
+    facts:[
+      'Made a one-handed, fingertip touchdown catch against Dallas on Sunday Night Football in November 2014.',
+      'Won 2014 Offensive Rookie of the Year with 1,305 yards in 12 games.',
+      'Topped 1,300 receiving yards in each of his first three seasons.',
+      'Caught a touchdown in the Rams’ Super Bowl LVI win.'
+    ],
+    honors:['2014 Offensive Rookie of the Year','3× Pro Bowl','Super Bowl LVI champion'] },
+
+  { id:'wayne', first:'Reggie', last:'Wayne', back:'WAYNE', num:'87', pos:'Wide receiver', team:'Indianapolis Colts', years:'2001–2014',
+    college:'Miami', draft:'2001 · Rd 1, No. 30', kitName:'Royal blue home',
+    kit:COLTS,
+    stats:[['1,070','Receptions'],['14,345','Receiving yards'],['82','Receiving TDs'],['6','Pro Bowls']],
+    facts:[
+      'Led the NFL with 1,510 receiving yards in 2007.',
+      'Won Super Bowl XLI with Peyton Manning and the Colts.',
+      'Played all 14 seasons in Indianapolis and holds the Colts’ postseason records for catches, yards and touchdowns.',
+      'Caught a career-high 111 passes in 2010 and made first-team All-Pro.'
+    ],
+    honors:['Super Bowl XLI champion','6× Pro Bowl','2010 first-team All-Pro'] },
+
+  { id:'turner', first:'Michael', last:'Turner', back:'TURNER', num:'33', pos:'Running back', team:'Atlanta Falcons', years:'2008–2012', nick:'The Burner',
+    college:'Northern Illinois', draft:'2004 · Rd 5, No. 154', kitName:'Red alternate',
+    kit:FALCONS_RED,
+    stats:[['7,338','Rushing yards'],['66','Rushing TDs'],['1,699','Yards in 2008'],['17','Rush TDs in 2008']],
+    facts:[
+      'Spent his first four seasons in San Diego as LaDainian Tomlinson’s backup.',
+      'Ran for 220 yards in his Falcons debut in 2008.',
+      'Set Falcons single-season records that year with 1,699 rushing yards and 17 rushing touchdowns.'
+    ],
+    honors:['2008 first-team All-Pro','2× Pro Bowl'] },
+
+  { id:'jennings', first:'Greg', last:'Jennings', back:'JENNINGS', num:'85', pos:'Wide receiver', team:'Green Bay Packers', years:'2006–2012',
+    college:'Western Michigan', draft:'2006 · Rd 2, No. 52', kitName:'Green home',
+    kit:PACKERS,
+    stats:[['571','Receptions'],['8,291','Receiving yards'],['64','Receiving TDs'],['2','Pro Bowls']],
+    facts:[
+      'Caught two touchdown passes in Green Bay’s Super Bowl XLV win.',
+      'Topped 1,100 receiving yards in three straight seasons, 2008 through 2010.',
+      'A second-round pick out of Western Michigan in 2006.'
+    ],
+    honors:['Super Bowl XLV champion','2× Pro Bowl'] },
+
+  { id:'roddy-white', first:'Roddy', last:'White', back:'WHITE', num:'84', pos:'Wide receiver', team:'Atlanta Falcons', years:'2005–2015',
+    college:'UAB', draft:'2005 · Rd 1, No. 27', kitName:'Black home',
+    kit:FALCONS_BLACK,
+    stats:[['808','Receptions'],['10,863','Receiving yards'],['63','Receiving TDs'],['115','Catches in 2010']],
+    facts:[
+      'Holds the Falcons’ career record with 63 touchdown catches.',
+      'Led the NFL with 115 catches in 2010.',
+      'Topped 1,000 receiving yards in six straight seasons, 2007 through 2012.',
+      'Spent all 11 of his seasons in Atlanta.'
+    ],
+    honors:['2010 first-team All-Pro','4× Pro Bowl'] },
+
+  { id:'mcfadden', first:'Darren', last:'McFadden', back:'McFADDEN', num:'20', pos:'Running back', team:'Oakland Raiders', years:'2008–2014', nick:'Run DMC',
+    college:'Arkansas', draft:'2008 · Rd 1, No. 4', kitName:'Black home',
+    kit:{ body:'#141414', collar:'#141414', trim:'#A5ACAF', font:'round', sx:.9,
+      num:{fill:'#FFFFFF', outlines:[{c:'#A5ACAF', w:2}]}, name:{fill:'#FFFFFF'} },
+    stats:[['5,421','Rushing yards'],['28','Rushing TDs'],['1,157','Yards in 2010'],['1,089','Yards in 2015']],
+    facts:[
+      'Finished second in Heisman Trophy voting twice at Arkansas, in 2006 and 2007.',
+      'Oakland took him fourth overall in 2008.',
+      'Had his best Raiders season in 2010 with 1,157 rushing yards.',
+      'Ran for 1,089 yards for Dallas in 2015.'
+    ],
+    honors:['2× Heisman runner-up','2× Doak Walker Award'] },
+
+  { id:'flacco', first:'Joe', last:'Flacco', back:'FLACCO', num:'5', pos:'Quarterback', team:'Baltimore Ravens', years:'2008–2018',
+    college:'Delaware', draft:'2008 · Rd 1, No. 18', kitName:'Purple home',
+    kit:{ body:'#3C2585', collar:'#141414', font:'cut', sx:.9,
+      num:{fill:'#FFFFFF', outlines:[{c:'#141414', w:2.6},{c:'#9E7C0C', w:1.6}]}, name:{fill:'#FFFFFF', outlines:[{c:'#141414', w:.8}]},
+      stripes:{start:0, list:[{c:'#141414',w:9}]} },
+    stats:[['212','TD passes as a Raven'],['11','TD passes, 2012 playoffs'],['0','INTs, 2012 playoffs'],['1','Super Bowl MVP']],
+    facts:[
+      'Threw 11 touchdown passes and no interceptions in the 2012 playoffs, tying the postseason record, and was MVP of Super Bowl XLVII.',
+      'Won at least one playoff game in each of his first five seasons.',
+      'Holds the Ravens’ record with 212 touchdown passes.',
+      'Won Comeback Player of the Year with Cleveland in 2023, at 38.'
+    ],
+    honors:['Super Bowl XLVII MVP','2023 Comeback Player of the Year','2014 Pro Bowl'] },
+
+  { id:'steven-jackson', first:'Steven', last:'Jackson', back:'JACKSON', num:'39', pos:'Running back', team:'St. Louis Rams', years:'2004–2012',
+    college:'Oregon State', draft:'2004 · Rd 1, No. 24', kitName:'White road', cardBg:'#E6E9EE', ink:'#13244A',
+    kit:{ body:'#F3F4F6', collar:'#13244A', font:'round', sx:.9,
+      num:{fill:'#13244A', outlines:[{c:'#C9AF74', w:2.4}]}, name:{fill:'#13244A'},
+      sleeve:'#13244A', horn:{c:'#C9AF74', edge:'#C9AF74', wide:true} },
+    stats:[['8','Straight 1,000-yd seasons'],['69','Rushing TDs'],['2,334','Scrimmage yds in 2006'],['3','Pro Bowls']],
+    facts:[
+      'The Rams’ career rushing leader, ahead of Eric Dickerson and Marshall Faulk.',
+      'Ran for at least 1,000 yards in eight straight seasons, 2005 through 2012.',
+      'Led the NFL with 2,334 yards from scrimmage in 2006.',
+      'Finished with 11,438 career rushing yards, 10,138 of them with the Rams.'
+    ],
+    honors:['3× Pro Bowl','Rams career rushing leader'] },
+
+  { id:'santana-moss', first:'Santana', last:'Moss', back:'MOSS', num:'89', pos:'Wide receiver', team:'Washington Redskins', years:'2005–2014',
+    college:'Miami', draft:'2001 · Rd 1, No. 16', kitName:'Burgundy home',
+    kit:WASHINGTON,
+    stats:[['732','Receptions'],['10,283','Receiving yards'],['66','Receiving TDs'],['1,483','Yards in 2005']],
+    facts:[
+      'Set Washington’s single-season record with 1,483 receiving yards in 2005, his first year with the team.',
+      'Caught two touchdowns in the last four minutes to beat Dallas on Monday Night Football in September 2005.',
+      'Came over from the Jets in a 2005 trade for Laveranues Coles.',
+      'Ranks third in team history with 581 catches.'
+    ],
+    honors:['2005 Pro Bowl'] },
+
+  { id:'welker', first:'Wes', last:'Welker', back:'WELKER', num:'83', pos:'Wide receiver', team:'New England Patriots', years:'2007–2012',
+    college:'Texas Tech', draft:'Undrafted, 2004', kitName:'Navy home',
+    kit:PATS,
+    stats:[['903','Receptions'],['9,924','Receiving yards'],['672','Catches as a Patriot'],['5','Seasons of 110+ catches']],
+    facts:[
+      'Caught at least 110 passes in five seasons with New England.',
+      'Led the NFL with 1,569 receiving yards in 2011.',
+      'Went undrafted out of Texas Tech and kicked a field goal and an extra point for Miami as a rookie in 2004.',
+      'Came to New England from Miami in a 2007 trade for second- and seventh-round picks.'
+    ],
+    honors:['5× Pro Bowl','2× first-team All-Pro'] },
+
+  { id:'marshall', first:'Brandon', last:'Marshall', back:'MARSHALL', num:'15', pos:'Wide receiver', team:'Denver Broncos', years:'2006–2009',
+    college:'UCF', draft:'2006 · Rd 4, No. 119', kitName:'Orange alternate', ink:'#0A2240',
+    kit:BRONCOS_ORANGE,
+    stats:[['970','Receptions'],['12,351','Receiving yards'],['83','Receiving TDs'],['21','Catches in one game']],
+    facts:[
+      'Caught 21 passes against the Colts in December 2009, an NFL single-game record.',
+      'Topped 1,000 receiving yards with four teams: Denver, Miami, Chicago and the Jets.',
+      'Caught passes from Jay Cutler in both Denver and Chicago.',
+      'A fourth-round pick out of UCF in 2006.'
+    ],
+    honors:['6× Pro Bowl'] }
 ];
 
 const TICKER = [
@@ -722,8 +933,16 @@ const TICKER = [
   ['Foster','1,616 yds in 2010'], ['Gurley','21 TDs in 2018'], ['A. Johnson','1,575 yds in 2008'],
   ['Nelson','1,519 yds in 2014'], ['Jones-Drew','1,606 yds in 2011'], ['Gore','16,000 career rush yds'],
   ['Wilson','292 TD passes in Seattle'], ['Ryan','2016 MVP'], ['Newton','75 rushing TDs'],
-  ['Gronkowski','17 TD catches in 2011'], ['Graham','16 TD catches in 2013'], ['Portis','1,516 yds in 2005']
+  ['Gronkowski','17 TD catches in 2011'], ['Graham','16 TD catches in 2013'], ['Portis','1,516 yds in 2005'],
+  ['Elliott','1,631 yds as a rookie'], ['Green','7 straight Pro Bowls'], ['Bell','236 yds vs Buffalo'],
+  ['C. Johnson','2,509 scrimmage yds in 2009'], ['Beckham','one-handed catch vs Dallas'], ['Wayne','1,510 yds in 2007'],
+  ['Turner','1,699 yds in 2008'], ['Jennings','2 TDs in Super Bowl XLV'], ['R. White','63 TD catches'],
+  ['McFadden','1,157 yds in 2010'], ['Flacco','11 TDs, 0 INTs in the 2012 playoffs'], ['S. Jackson','8 straight 1,000-yd seasons'],
+  ['S. Moss','1,483 yds in 2005'], ['Welker','5 seasons of 110+ catches'], ['Marshall','21 catches in one game']
 ];
+
+// Regular-season stats by franchise through 2025, from ESPN: [team, seasons, three position stats]
+const SPLITS = {"tomlinson":{"k":"RB","t":[["Chargers","2001–09",12490,138,3955],["Jets","2010–11",1194,7,817]],"c":[13684,145,4772]},"forte":{"k":"RB","t":[["Bears","2008–15",8602,45,4116],["Jets","2016–17",1194,9,556]],"c":[9796,54,4672]},"fitzgerald":{"k":"WR","t":[["Cardinals","2004–20",1432,17492,121]],"c":[1432,17492,121]},"brady":{"k":"QB","t":[["Patriots","2000–19",74571,541,179],["Buccaneers","2020–22",14643,108,33]],"c":[89214,649,212]},"peyton-manning":{"k":"QB","t":[["Colts","1998–2010",54828,399,198],["Broncos","2012–15",17112,140,53]],"c":[71940,539,251]},"brees":{"k":"QB","t":[["Chargers","2001–05",12348,80,53],["Saints","2006–20",68010,491,190]],"c":[80358,571,243]},"jackson":{"k":"WR","t":[["Eagles","2008–13, 2019–20",379,6512,35],["Washington","2014–16",142,2702,14],["Buccaneers","2017–18",91,1442,7],["Rams","2021",8,221,1],["Raiders","2021",12,233,1],["Ravens","2022",9,153,0]],"c":[641,11263,58]},"eli-manning":{"k":"QB","t":[["Giants","2004–19",57023,366,244]],"c":[57023,366,244]},"smith":{"k":"WR","t":[["Panthers","2001–13",836,12197,67],["Ravens","2014–16",195,2534,14]],"c":[1031,14731,81]},"cutler":{"k":"QB","t":[["Broncos","2006–08",9024,54,37],["Bears","2009–16",23443,154,109],["Dolphins","2017",2666,19,14]],"c":[35133,227,160]},"julio":{"k":"WR","t":[["Falcons","2011–20",848,12896,60],["Titans","2021",31,434,1],["Buccaneers","2022",24,299,2],["Eagles","2023",11,74,3]],"c":[914,13703,66]},"peterson":{"k":"RB","t":[["Vikings","2007–16",11747,97,1945],["Saints","2017",81,0,4],["Cardinals","2017",448,2,66],["Washington","2018–19",1940,12,350],["Lions","2020",604,7,101],["Titans","2021",82,1,8],["Seahawks","2021",16,1,0]],"c":[14918,120,2474]},"johnson":{"k":"WR","t":[["Lions","2007–15",731,11619,83]],"c":[731,11619,83]},"gates":{"k":"WR","t":[["Chargers","2003–18",955,11841,116]],"c":[955,11841,116]},"lynch":{"k":"RB","t":[["Bills","2007–10",2765,17,670],["Seahawks","2010–15, 2019",6381,58,1309],["Raiders","2017–18",1267,10,235]],"c":[10413,85,2214]},"moss":{"k":"WR","t":[["Vikings","1998–2004, 2010",587,9316,92],["Raiders","2005–06",102,1558,11],["Patriots","2007–10",259,3904,50],["Titans","2010",6,80,0],["49ers","2012",28,434,3]],"c":[982,15292,156]},"rivers":{"k":"QB","t":[["Chargers","2004–19",59271,397,198],["Colts","2020, 2025",4713,28,14]],"c":[63984,425,212]},"roethlisberger":{"k":"QB","t":[["Steelers","2004–21",64088,418,211]],"c":[64088,418,211]},"owens":{"k":"WR","t":[["49ers","1996–2003",592,8572,81],["Eagles","2004–05",124,1963,20],["Cowboys","2006–08",235,3587,38],["Bills","2009",55,829,5],["Bengals","2010",72,983,9]],"c":[1078,15934,153]},"ochocinco":{"k":"WR","t":[["Bengals","2001–10",751,10783,66],["Patriots","2011",15,276,1]],"c":[766,11059,67]},"brown":{"k":"WR","t":[["Steelers","2010–18",837,11207,74],["Patriots","2019",4,56,1],["Buccaneers","2020–21",87,1028,8]],"c":[928,12291,83]},"charles":{"k":"RB","t":[["Chiefs","2008–16",7260,43,2457],["Broncos","2017",296,1,129],["Jaguars","2018",7,0,7]],"c":[7563,44,2593]},"mccoy":{"k":"RB","t":[["Eagles","2009–14",6792,44,2282],["Bills","2015–18",3814,25,1334],["Chiefs","2019",465,4,181],["Buccaneers","2020",31,0,101]],"c":[11102,73,3898]},"foster":{"k":"RB","t":[["Texans","2009–15",6472,54,2268],["Dolphins","2016",55,0,78]],"c":[6527,54,2346]},"gurley":{"k":"RB","t":[["Rams","2015–19",5404,58,2090],["Falcons","2020",678,9,164]],"c":[6082,67,2254]},"andre-johnson":{"k":"WR","t":[["Texans","2003–14",1012,13597,64],["Colts","2015",41,503,4],["Titans","2016",9,85,2]],"c":[1062,14185,70]},"nelson":{"k":"WR","t":[["Packers","2008–14, 2016–17",550,7848,69],["Raiders","2018",63,739,3]],"c":[613,8587,72]},"jones-drew":{"k":"RB","t":[["Jaguars","2006–13",8071,68,2873],["Raiders","2014",96,0,71]],"c":[8167,68,2944]},"gore":{"k":"RB","t":[["49ers","2005–14",11073,64,2883],["Colts","2015–17",2953,13,789],["Dolphins","2018",722,0,124],["Bills","2019",599,2,100],["Jets","2020",653,2,89]],"c":[16000,81,3985]},"wilson":{"k":"QB","t":[["Seahawks","2012–21",37059,292,87],["Broncos","2022–23",6594,42,19],["Steelers","2024",2482,16,5],["Giants","2025",831,3,3]],"c":[46966,353,114]},"ryan":{"k":"QB","t":[["Falcons","2008–21",59735,367,170],["Colts","2022",3057,14,13]],"c":[62792,381,183]},"newton":{"k":"QB","t":[["Panthers","2011–19, 2021",29725,186,113],["Patriots","2020",2657,8,10]],"c":[32382,194,123]},"gronkowski":{"k":"WR","t":[["Patriots","2010–18",521,7861,79],["Buccaneers","2020–21",100,1425,13]],"c":[621,9286,92]},"graham":{"k":"WR","t":[["Saints","2010–14, 2023",392,4791,55],["Seahawks","2015–17",170,2048,18],["Packers","2018–19",93,1083,5],["Bears","2020–21",64,623,11]],"c":[719,8545,89]},"portis":{"k":"RB","t":[["Broncos","2002–03",3099,29,678],["Washington","2004–10",6824,46,1340]],"c":[9923,75,2018]},"elliott":{"k":"RB","t":[["Cowboys","2016–22, 2024",8488,71,2405],["Patriots","2023",642,3,313]],"c":[9130,74,2718]},"aj-green":{"k":"WR","t":[["Bengals","2011–18, 2020",649,9430,65],["Cardinals","2021–22",78,1084,5]],"c":[727,10514,70]},"bell":{"k":"RB","t":[["Steelers","2013–17",5336,35,2660],["Jets","2019–20",863,3,500],["Chiefs","2020",254,2,99],["Ravens","2021",83,2,-1],["Buccaneers","2021",18,0,31]],"c":[6554,42,3289]},"chris-johnson":{"k":"RB","t":[["Titans","2008–13",7965,50,2003],["Jets","2014",663,1,151],["Cardinals","2015–17",1023,4,101]],"c":[9651,55,2255]},"beckham":{"k":"WR","t":[["Giants","2014–18",390,5476,44],["Browns","2019–21",114,1586,7],["Rams","2021",27,305,5],["Ravens","2023",35,565,3],["Dolphins","2024",9,55,0]],"c":[575,7987,59]},"wayne":{"k":"WR","t":[["Colts","2001–14",1070,14345,82]],"c":[1070,14345,82]},"turner":{"k":"RB","t":[["Chargers","2004–07",1257,6,71],["Falcons","2008–12",6081,60,457]],"c":[7338,66,528]},"jennings":{"k":"WR","t":[["Packers","2006–12",425,6537,53],["Vikings","2013–14",127,1546,10],["Dolphins","2015",19,208,1]],"c":[571,8291,64]},"roddy-white":{"k":"WR","t":[["Falcons","2005–15",808,10863,63]],"c":[808,10863,63]},"mcfadden":{"k":"RB","t":[["Raiders","2008–14",4247,25,1769],["Cowboys","2015–17",1174,3,345]],"c":[5421,28,2114]},"flacco":{"k":"QB","t":[["Ravens","2008–18",38245,212,136],["Broncos","2019",1822,6,5],["Jets","2020–22",2253,14,6],["Browns","2023, 2025",2431,15,14],["Colts","2024",1761,12,7],["Bengals","2025",1664,13,4]],"c":[48176,272,172]},"steven-jackson":{"k":"RB","t":[["Rams","2004–12",10138,56,3324],["Falcons","2013–14",1250,12,339],["Patriots","2015",50,1,20]],"c":[11438,69,3683]},"santana-moss":{"k":"WR","t":[["Jets","2001–04",151,2416,19],["Washington","2005–14",581,7867,47]],"c":[732,10283,66]},"welker":{"k":"WR","t":[["Dolphins","2004–06",96,1121,1],["Patriots","2007–12",672,7459,37],["Broncos","2013–14",122,1242,12],["Rams","2015",13,102,0]],"c":[903,9924,50]},"marshall":{"k":"WR","t":[["Broncos","2006–09",327,4019,25],["Dolphins","2010–11",167,2228,9],["Bears","2012–14",279,3524,31],["Jets","2015–16",168,2290,17],["Giants","2017",18,154,0],["Seahawks","2018",11,136,1]],"c":[970,12351,83]}};
 
 /* ---------- Tackle-twill block numerals (100 units tall) ---------- */
 const DIG = {
@@ -825,6 +1044,7 @@ function backSVG(p, i){
   if (k.sidePipe) deco += `<path d="M187 114Q186 172 189 236" stroke="${k.sidePipe}" stroke-width="2.2" fill="none"/>`;
   if (k.insert) deco += `<path d="M172 44L196 52Q189 74 190 96H177Q178 70 172 44Z" fill="${k.insert}"/>`;
   if (k.panel) deco += `<polygon points="184,49 197,52 214,58 222,72 229,94 190,69" fill="${k.panel.c}"/><line x1="190" y1="69" x2="229" y2="94" stroke="${k.panel.pipe}" stroke-width="2.4"/>`;
+  if (k.yoke) deco += `<path d="M146 34L196 52Q214 58 222 72L229 92Q204 70 184 62Q164 55 150 47Z" fill="${k.yoke.c}"/><path d="M150 47Q164 55 184 62Q204 70 229 92" stroke="${k.yoke.pipe}" stroke-width="2.2" fill="none"/>`;
   // Horns start out at the shoulder so the nameplate keeps clear space around it.
   if (k.horn) deco += `<path d="${k.horn.wide ? 'M178 49Q216 55 233 104Q206 80 180 65Z' : 'M186 57Q215 64 233 110Q207 80 186 67Z'}" fill="${k.horn.c}" stroke="${k.horn.edge}" stroke-width="1.6"/>`;
   if (k.bolt) deco += `<g transform="translate(184 64) rotate(30) scale(.68)">${boltMarkup(k.bolt)}</g>`;
@@ -894,7 +1114,8 @@ function sideSVG(p, i){
   if (k.tiger) sleeve += `<path d="M16 56Q40 50 64 58Q40 61 16 61ZM15 76Q42 70 65 79Q42 83 15 82ZM14 96Q40 90 66 99Q40 103 14 102Z" fill="${k.tiger}"/>`;
   if (k.armBand) sleeve += `<path d="M12 60Q40 46 68 60" stroke="${k.armBand.pipe}" stroke-width="13" fill="none"/><path d="M12 60Q40 46 68 60" stroke="${k.armBand.c}" stroke-width="10" fill="none"/>`;
   if (k.swoosh) sleeve += `<path d="M8 121Q40 131 72 106L72 96Q40 118 8 109Z" fill="${k.swoosh.c}"/><path d="M8 109Q40 118 72 96" stroke="${k.swoosh.pipe}" stroke-width="2" fill="none"/>`;
-  if (k.panel) sleeve += `<path d="M18 40Q40 30 62 40L58 62Q40 53 22 62Z" fill="${k.panel.c}"/><path d="M22 62Q40 53 58 62" stroke="${k.panel.pipe}" stroke-width="2.4" fill="none"/>`;
+  const cap = k.panel || k.yoke;
+  if (cap) sleeve += `<path d="M18 40Q40 30 62 40L58 62Q40 53 22 62Z" fill="${cap.c}"/><path d="M22 62Q40 53 58 62" stroke="${cap.pipe}" stroke-width="2.4" fill="none"/>`;
   if (k.shoulderStripes) [9, 18].forEach(o => sleeve += `<path d="M12 ${52 + o}Q40 ${38 + o} 68 ${52 + o}" stroke="${k.shoulderStripes}" stroke-width="5" fill="none"/>`);
   if (k.horn) sleeve += `<path d="M26 39Q50 60 62 118Q44 68 21 48Z" fill="${k.horn.c}" stroke="${k.horn.edge}" stroke-width="1.5"/>`;
   if (k.bolt) sleeve += `<g transform="translate(23 44) rotate(60) scale(.9)">${boltMarkup(k.bolt)}</g>`;
@@ -910,7 +1131,7 @@ function sideSVG(p, i){
   let tv = '';
   if (!k.bolt && !k.tiger){
     const dg = digitDefs(p.num, k, u + 'n');
-    const h = k.fleur ? 15 : 20, cy = k.fleur ? 62 : k.shoulderStripes ? 92 : k.panel || k.armBand ? 84 : k.horn ? 86 : 74;
+    const h = k.fleur ? 15 : 20, cy = k.fleur ? 62 : k.shoulderStripes ? 92 : k.panel || k.yoke || k.armBand ? 84 : k.horn ? 86 : 74;
     tv = `<defs>${dg.defs}</defs>${numberUse(u + 'n', dg.w, k, { h, cx:40, top:cy - h / 2, os:.5 })}`;
   }
 
@@ -971,6 +1192,28 @@ document.getElementById('ticker').innerHTML = tick + tick.replace(/<span>/g, '<s
 
 let cur = 0;
 
+const SPLIT_COLS = { QB:['Pass yds','Pass TD','INT'], RB:['Rush yds','Rush TD','Rec yds'], WR:['Rec','Rec yds','Rec TD'] };
+const fmt = n => n.toLocaleString('en-US');
+
+// Every team the player suited up for; the row for the jersey on the rack is marked.
+function splitTable(p){
+  const sp = SPLITS[p.id];
+  if (!sp) return '';
+  const home = /^Washington/.test(p.team) ? 'Washington' : p.team.split(' ').pop();
+  const head = SPLIT_COLS[sp.k].map(c => `<th scope="col">${c}</th>`).join('');
+  const rows = sp.t.map(([name, yrs, ...v]) => `<tr${name === home ? ' class="is-jersey"' : ''}>
+      <th scope="row">${name}</th><td class="yrs">${yrs}</td>${v.map(n => `<td>${fmt(n)}</td>`).join('')}</tr>`).join('');
+  const foot = sp.t.length > 1
+    ? `<tfoot><tr><th scope="row">Career</th><td class="yrs"></td>${sp.c.map(n => `<td>${fmt(n)}</td>`).join('')}</tr></tfoot>` : '';
+  return `<div class="splits">
+      <h3>By team <span>Regular season through 2025</span></h3>
+      <div class="split-scroll"><table>
+        <thead><tr><th scope="col">Team</th><th scope="col" class="yrs">Seasons</th>${head}</tr></thead>
+        <tbody>${rows}</tbody>${foot}
+      </table></div>
+    </div>`;
+}
+
 function renderCard(p){
   const k = p.kit, dg = digitDefs(p.num, k, 'cardnum');
   const pad = 6, w = dg.w * (k.sx || .9) + pad * 2;
@@ -995,6 +1238,7 @@ function renderCard(p){
       </dl>
     </header>
     <div class="stats">${p.stats.map(([v, l]) => `<div class="stat"><b>${v}</b><span>${l}</span></div>`).join('')}</div>
+    ${splitTable(p)}
     <div class="card-body">
       <div><h3>Highlights</h3><ul class="hl">${p.facts.map(f => `<li>${f}</li>`).join('')}</ul></div>
       <div><h3>Honors</h3><ul class="chips">${p.honors.map(h => `<li class="chip${/^Hall of Fame/.test(h) ? ' hof' : ''}">${h}</li>`).join('')}</ul></div>

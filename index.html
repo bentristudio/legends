@@ -1,0 +1,1047 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>html,body{margin:0}</style>
+<title>Legends Jersey Rack</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,500;0,600;0,700;0,800;1,600;1,700&family=Barlow:wght@400;500;600&family=Graduate&family=Oswald:wght@500;600&display=swap">
+<style>
+/* Layout: a goalpost crossbar doubles as the clothes rail over a turf field; the player card sits below */
+:root{
+  --bg:#E8ECE4; --surface:#F9FAF6; --fg:#16201A; --muted:#56635A; --line:#CFD6CB;
+  --hof-bg:#E5CB7A; --hof-fg:#2A2210;
+  --turf-1:#2A5938; --turf-2:#2F603F; --chalk:#F4F1E6; --post:#F0C233; --post-hi:#FCE48E; --post-lo:#AF820C;
+  --flag:#F26A22; --board:#0C110E; --amber:#FFC94A;
+  --f-display:"Graduate","Rockwell","Arial Black",serif;
+  --f-cond:"Barlow Condensed","Arial Narrow","Helvetica Neue",sans-serif;
+  --f-body:"Barlow","Helvetica Neue",Arial,sans-serif;
+  --inset:clamp(14px,4vw,52px);
+  --jw:236px; --head-h:212px; --space:88px;
+  --open:calc(var(--jw) + 14px); --closed:calc(var(--jw) * .19);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0D1310; --surface:#151D18; --fg:#E6EBE4; --muted:#98A59C; --line:#29342D;
+    --hof-bg:#CDAE55; --hof-fg:#1C160A; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0D1310; --surface:#151D18; --fg:#E6EBE4; --muted:#98A59C; --line:#29342D;
+  --hof-bg:#CDAE55; --hof-fg:#1C160A; color-scheme:dark;
+}
+@media (max-width:640px){
+  :root{ --jw:172px; --head-h:178px; --space:66px; }
+}
+
+*{box-sizing:border-box}
+body{background:var(--bg); color:var(--fg); font-family:var(--f-body); font-size:16px; line-height:1.5}
+button{font:inherit; color:inherit}
+
+.wrap{max-width:1240px; margin:0 auto; padding-inline:clamp(16px,3vw,32px); padding-block:20px 56px; display:grid; gap:24px}
+
+/* ---------- Stage ---------- */
+.stage{position:relative; isolation:isolate; overflow:hidden; border-radius:22px; background:var(--turf-1); color:var(--chalk);
+  display:flex; flex-direction:column; box-shadow:0 30px 60px -34px rgba(0,0,0,.55)}
+.stage::before{content:""; position:absolute; inset:0; z-index:1; pointer-events:none;
+  background:radial-gradient(120% 70% at 50% -10%, rgba(255,255,255,.14), transparent 60%),
+             linear-gradient(180deg, transparent 55%, rgba(0,0,0,.22))}
+
+.field{position:absolute; top:0; bottom:0; left:50%; width:1760px; margin-left:-880px; z-index:0;
+  background:
+    linear-gradient(90deg, transparent 79px, rgba(244,241,230,.55) 79px 83px, transparent 83px 1677px, rgba(244,241,230,.55) 1677px 1681px, transparent 1681px),
+    repeating-linear-gradient(90deg, rgba(244,241,230,.26) 0 2px, transparent 2px 80px),
+    linear-gradient(90deg, rgba(0,0,0,.12) 0 80px, transparent 80px 1680px, rgba(0,0,0,.12) 1680px),
+    repeating-linear-gradient(90deg, var(--turf-1) 0 80px, var(--turf-2) 80px 160px)}
+.hashes{position:absolute; left:0; right:0; bottom:51px; height:9px;
+  background:repeating-linear-gradient(90deg, rgba(244,241,230,.38) 0 2px, transparent 2px 16px)}
+.yard{position:absolute; bottom:70px; transform:translateX(-50%); display:flex; gap:22px;
+  font-family:var(--f-display); font-size:50px; line-height:1; color:var(--chalk); opacity:.34}
+.yard[data-dir]::before{content:""; position:absolute; top:10px; border-block:6px solid transparent}
+.yard[data-dir="l"]::before{left:-18px; border-right:10px solid var(--chalk)}
+.yard[data-dir="r"]::before{right:-18px; border-left:10px solid var(--chalk)}
+
+.goalpost{position:absolute; inset:0; z-index:2; pointer-events:none}
+.upright{position:absolute; top:22px; width:12px; height:calc(var(--head-h) + var(--jw) * .0583 - 22px);
+  background:linear-gradient(90deg, var(--post-lo), var(--post) 38%, var(--post-hi) 55%, var(--post) 72%, var(--post-lo));
+  border-radius:6px 6px 0 0; box-shadow:4px 0 10px rgba(0,0,0,.18)}
+.upright.l{left:var(--inset)} .upright.r{right:var(--inset)}
+.upright::after{content:""; position:absolute; top:2px; left:4px; width:5px; height:32px; background:var(--flag);
+  border-radius:2px; transform-origin:50% 0; transform:rotate(26deg); animation:flutter 2.6s ease-in-out infinite alternate}
+.upright.r::after{animation-delay:-1.3s}
+@keyframes flutter{to{transform:rotate(34deg) scaleY(.92)}}
+/* Scales with the jerseys so every hook wraps a bar of the same thickness */
+.crossbar{position:absolute; left:var(--inset); right:var(--inset); height:calc(var(--jw) * .0508); top:calc(var(--head-h) + var(--jw) * .0329);
+  border-radius:99px; background:linear-gradient(180deg, var(--post-hi), var(--post) 36%, var(--post-lo));
+  box-shadow:0 8px 14px rgba(0,0,0,.28)}
+
+.top{position:relative; z-index:3; height:var(--head-h); display:flex; flex-direction:column; align-items:center; justify-content:flex-end;
+  gap:8px; padding:0 calc(var(--inset) + 26px) 30px; text-align:center}
+.kicker{margin:0; font-family:var(--f-cond); font-weight:600; font-size:13px; letter-spacing:.24em; text-transform:uppercase; opacity:.85}
+.logo{margin:0; font-family:var(--f-display); font-weight:400; font-size:clamp(46px,10.5vw,128px); line-height:.9; letter-spacing:.03em;
+  text-transform:uppercase; color:var(--chalk); text-shadow:3px 4px 0 var(--post-lo), 6px 9px 0 rgba(0,0,0,.28)}
+.sub{margin:0; font-family:var(--f-cond); font-weight:500; font-size:16px; letter-spacing:.06em; opacity:.85; text-wrap:balance}
+
+/* ---------- Rack ---------- */
+.track{position:relative; z-index:3; margin-inline:var(--inset); height:calc(var(--jw) * 1.0667 + 26px);
+  overflow-x:auto; overflow-y:hidden; scrollbar-width:none;
+  -webkit-mask-image:linear-gradient(90deg, transparent 0, #000 26px, #000 calc(100% - 26px), transparent);
+          mask-image:linear-gradient(90deg, transparent 0, #000 26px, #000 calc(100% - 26px), transparent)}
+.track::-webkit-scrollbar{display:none}
+.rack-inner{display:flex; width:max-content; margin-inline:auto; padding-inline:44px; height:100%}
+.slot{position:relative; flex:0 0 var(--closed); height:100%; padding:0; border:0; background:none; cursor:pointer;
+  perspective:900px; transition:flex-basis .62s cubic-bezier(.22,.8,.24,1); -webkit-tap-highlight-color:transparent}
+.slot[aria-selected="true"]{flex-basis:var(--open); cursor:default}
+.slot:focus-visible{outline:2px solid var(--chalk); outline-offset:-3px; border-radius:10px}
+
+.face{position:absolute; top:0; left:50%; transform-origin:50% 0; backface-visibility:hidden}
+.face svg{display:block; width:100%; height:auto; overflow:visible}
+.face.back{width:var(--jw); margin-left:calc(var(--jw) / -2)}
+.face.side{width:calc(var(--jw) / 3); margin-left:calc(var(--jw) / -6)}
+.face.back svg{filter:drop-shadow(0 16px 14px rgba(0,0,0,.4))}
+.face.side svg{filter:drop-shadow(6px 12px 8px rgba(0,0,0,.42))}
+
+/* hanging side-on */
+.slot .back{opacity:0; transform:rotateY(-86deg); transition:transform .3s ease, opacity .18s ease}
+.slot.is-before .back{transform:rotateY(86deg)}
+.slot .side{opacity:1; transform:none; transition:transform .34s ease, opacity .22s ease .24s, filter .3s}
+/* turned to face you */
+.slot[aria-selected="true"] .back{opacity:1; transform:none; transition:transform .55s cubic-bezier(.25,.8,.3,1) .16s, opacity .22s ease .16s}
+.slot[aria-selected="true"] .side{opacity:0; transform:rotateY(86deg); transition:transform .3s ease, opacity .16s ease}
+@media (hover:hover){
+  .slot:not([aria-selected="true"]):hover .side{transform:translateY(-5px); filter:brightness(1.1)}
+}
+.slot[aria-selected="true"] .back svg{transform-origin:50% 5.47%; animation:swing 1.4s cubic-bezier(.3,.6,.3,1) .2s both}
+@keyframes swing{0%{transform:rotate(2.6deg)}35%{transform:rotate(-1.6deg)}65%{transform:rotate(.7deg)}100%{transform:rotate(0)}}
+
+.controls{position:relative; z-index:3; display:grid; grid-template-columns:auto minmax(0,1fr) auto; align-items:center; gap:14px;
+  width:100%; max-width:640px; margin:4px auto 0; padding-inline:var(--inset)}
+.pill{font-family:var(--f-cond); font-weight:600; font-size:14px; letter-spacing:.14em; text-transform:uppercase; color:var(--chalk);
+  background:rgba(0,0,0,.2); border:1.5px solid rgba(244,241,230,.72); border-radius:999px; padding:9px 18px; cursor:pointer;
+  transition:background .2s, color .2s}
+.pill:hover{background:var(--chalk); color:var(--turf-1)}
+.pill:focus-visible{outline:2px solid var(--amber); outline-offset:3px}
+.now{min-width:0; display:grid; justify-items:center; text-align:center}
+.now-name{font-family:var(--f-cond); font-weight:700; font-size:22px; line-height:1.15; letter-spacing:.06em; text-transform:uppercase}
+.now-meta{font-family:var(--f-cond); font-weight:500; font-size:14px; letter-spacing:.12em; text-transform:uppercase; opacity:.82; font-variant-numeric:tabular-nums}
+
+.field-space{height:var(--space); flex:none}
+
+.ticker{position:relative; z-index:3; height:47px; border-top:5px solid var(--chalk); background:var(--board); overflow:hidden; display:flex; align-items:center}
+.ticker-track{display:flex; width:max-content; animation:crawl 80s linear infinite}
+.ticker:hover .ticker-track{animation-play-state:paused}
+.ticker-track span{display:inline-flex; align-items:center; gap:10px; padding-inline:18px; white-space:nowrap;
+  font-family:var(--f-cond); font-weight:600; font-size:15px; letter-spacing:.1em; text-transform:uppercase; color:#E5E9E2}
+.ticker-track span::before{content:""; width:16px; height:10px; flex:none;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 12'%3E%3Cellipse cx='10' cy='6' rx='9.5' ry='5.5' fill='%23B9783F'/%3E%3Cpath d='M6 6h8M8 4.4v3.2M10 4.4v3.2M12 4.4v3.2' stroke='%23fff' stroke-width='1.1'/%3E%3C/svg%3E") center/contain no-repeat}
+.ticker-track b{color:var(--amber); font-weight:700}
+@keyframes crawl{to{transform:translateX(-50%)}}
+
+/* ---------- Player card ---------- */
+.card{background:var(--surface); border:1px solid var(--line); border-radius:20px; overflow:hidden; outline:none}
+.card:focus-visible{box-shadow:0 0 0 3px var(--muted)}
+.card-inner{animation:rise .5s cubic-bezier(.22,.8,.24,1)}
+@keyframes rise{from{opacity:.15; transform:translateY(10px)}to{opacity:1; transform:none}}
+.card-head{position:relative; display:grid; grid-template-columns:auto minmax(0,1fr) auto; align-items:center; gap:18px 28px;
+  padding:22px clamp(18px,3vw,34px); background:var(--team); color:var(--ink)}
+.card-head::after{content:""; position:absolute; inset:0; pointer-events:none;
+  background:repeating-linear-gradient(135deg, rgba(255,255,255,.05) 0 2px, transparent 2px 7px)}
+.card-num{display:block; height:clamp(70px,9vw,104px); width:auto; overflow:visible; position:relative; z-index:1}
+.card-id{min-width:0; position:relative; z-index:1}
+.eyebrow{margin:0; font-family:var(--f-cond); font-weight:600; font-size:13px; letter-spacing:.16em; text-transform:uppercase; opacity:.88}
+.card-name{margin:4px 0 0; font-family:var(--f-cond); font-weight:800; font-size:clamp(34px,5vw,58px); line-height:.95; letter-spacing:.01em;
+  text-transform:uppercase; text-wrap:balance}
+.nick{margin:6px 0 0; font-family:var(--f-cond); font-style:italic; font-weight:600; font-size:19px; letter-spacing:.04em}
+.bio{position:relative; z-index:1; margin:0; display:grid; gap:8px; font-size:15px; min-width:0}
+.bio div{display:grid; grid-template-columns:72px auto; gap:10px; align-items:baseline}
+.bio dt{font-family:var(--f-cond); font-weight:600; font-size:12px; letter-spacing:.16em; text-transform:uppercase; opacity:.78}
+.bio dd{margin:0; font-weight:600}
+
+.stats{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:1px; background:var(--line); border-bottom:1px solid var(--line)}
+.stat{position:relative; background:var(--surface); padding:20px clamp(16px,2.4vw,26px) 18px; display:grid; gap:6px; align-content:start}
+.stat::before{content:""; position:absolute; top:0; left:clamp(16px,2.4vw,26px); width:30px; height:4px; background:var(--team-line)}
+.stat b{font-family:var(--f-cond); font-weight:700; font-size:clamp(32px,4.2vw,46px); line-height:1; font-variant-numeric:tabular-nums; letter-spacing:.01em}
+.stat span{font-family:var(--f-cond); font-weight:600; font-size:13px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted)}
+
+.card-body{display:grid; grid-template-columns:minmax(0,1.7fr) minmax(0,1fr); gap:28px 48px; padding:26px clamp(18px,3vw,34px) 30px}
+.card-body h3{margin:0 0 14px; font-family:var(--f-cond); font-weight:700; font-size:13px; letter-spacing:.18em; text-transform:uppercase; color:var(--muted)}
+.hl{list-style:none; margin:0; padding:0; display:grid; gap:14px}
+.hl li{position:relative; padding-left:30px; max-width:64ch; font-size:16.5px; line-height:1.55}
+.hl li::before{content:""; position:absolute; left:0; top:.42em; width:19px; height:12px;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 12'%3E%3Cellipse cx='10' cy='6' rx='9.5' ry='5.5' fill='%239A5B2C'/%3E%3Cpath d='M6 6h8M8 4.4v3.2M10 4.4v3.2M12 4.4v3.2' stroke='%23fff' stroke-width='1.1'/%3E%3C/svg%3E") center/contain no-repeat}
+.chips{list-style:none; margin:0; padding:0; display:flex; flex-wrap:wrap; gap:8px}
+.chip{border:1px solid var(--line); border-radius:999px; padding:6px 13px; font-family:var(--f-cond); font-weight:600; font-size:15.5px; letter-spacing:.03em; line-height:1.2}
+.chip.hof{background:var(--hof-bg); color:var(--hof-fg); border-color:transparent}
+
+.note{margin:0; font-size:13.5px; color:var(--muted); max-width:70ch}
+
+@media (max-width:820px){
+  .card-head{grid-template-columns:auto minmax(0,1fr)}
+  .bio{grid-column:1 / -1; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); padding-top:14px; border-top:1px solid color-mix(in oklab, currentColor 25%, transparent)}
+  .bio div{grid-template-columns:1fr; gap:2px}
+  .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .card-body{grid-template-columns:1fr}
+}
+@media (max-width:640px){
+  .yard{font-size:36px; gap:16px; bottom:64px}
+  .yard[data-dir]::before{top:6px}
+  .sub{font-size:14.5px}
+  .kicker{font-size:12px}
+  .controls{gap:8px}
+  .pill{padding:8px 12px; font-size:13px; letter-spacing:.1em}
+  .now-name{font-size:18px}
+  .now-meta{font-size:12.5px}
+}
+@media (prefers-reduced-motion:reduce){
+  .slot,.face{transition-duration:.01s !important; transition-delay:0s !important}
+  .slot[aria-selected="true"] .back svg,.card-inner,.upright::after{animation:none}
+  .ticker-track{animation:none}
+}
+</style>
+</head>
+<body>
+
+<main class="wrap">
+  <section class="stage" aria-labelledby="logo">
+    <div class="field" id="field" aria-hidden="true"><div class="hashes"></div></div>
+    <div class="goalpost" aria-hidden="true"><i class="upright l"></i><i class="upright r"></i><i class="crossbar"></i></div>
+
+    <header class="top">
+      <p class="kicker">Throwback rack · 35 jerseys</p>
+      <h1 class="logo" id="logo">Legends</h1>
+      <p class="sub">Tap any jersey to turn it around and see the player card below.</p>
+    </header>
+
+    <div class="track" id="track">
+      <div class="rack-inner" id="rack" role="tablist" aria-label="Jerseys on the rack" aria-orientation="horizontal"></div>
+    </div>
+
+    <div class="controls">
+      <button class="pill" id="prev" type="button" aria-label="Previous jersey"><span aria-hidden="true">←</span> Prev</button>
+      <div class="now"><span class="now-name" id="now-name"></span><span class="now-meta" id="now-meta"></span></div>
+      <button class="pill" id="next" type="button" aria-label="Next jersey">Next <span aria-hidden="true">→</span></button>
+    </div>
+
+    <div class="field-space"></div>
+    <div class="ticker" aria-label="Record crawl"><div class="ticker-track" id="ticker"></div></div>
+  </section>
+
+  <section class="card" id="facts" role="tabpanel" tabindex="0" aria-live="polite">
+    <div class="card-inner" id="card"></div>
+  </section>
+
+  <p class="note">Fan-made tribute, not affiliated with the NFL or any club. Jerseys are drawn from photos of each team’s uniforms, without team logos. Stats are regular-season career totals unless the label says otherwise.</p>
+</main>
+
+<script>
+/* Uniform notes come from photos of each era's on-field jersey:
+   colors, number outlines, sleeve stripes, shoulder and side-panel trim. */
+const PATS = { body:'#102A56', collar:'#102A56', trim:'#C0C6CE', font:'round', sx:.92,
+  num:{fill:'#FFFFFF', outlines:[{c:'#C8102E', w:3}]}, name:{fill:'#FFFFFF'},
+  panel:{c:'#C0C6CE', pipe:'#C8102E'}, sidePipe:'#C8102E' };
+const CHARGERS_NAVY = { body:'#0B2345', collar:'#0B2345', trim:'#F2C230', font:'cut', sx:.86,
+  num:{fill:'#FFFFFF', outlines:[{c:'#F2C230', w:2.4},{c:'#4F8FD0', w:2}]}, name:{fill:'#FFFFFF', outlines:[{c:'#F2C230', w:.9}]},
+  bolt:{fill:'#F5C431', edges:['#FFFFFF','#4F8FD0']} };
+const EAGLES = { body:'#00535C', collar:'#141414', font:'cut', sx:.86,
+  num:{fill:'#FFFFFF', outlines:[{c:'#141414', w:2.6},{c:'#A5ACAF', w:2}]}, name:{fill:'#FFFFFF', outlines:[{c:'#141414', w:1},{c:'#A5ACAF', w:.8}]},
+  stripes:{start:0, list:[{c:'#141414',w:13},{c:'#A5ACAF',w:2},{c:'#FFFFFF',w:1.5}]}, sides:{c:'#141414', top:4, w:9, pipe:'#A5ACAF'} };
+const SEAHAWKS = { body:'#0D2449', collar:'#0D2449', trim:'#69BE28', font:'cut', sx:.9,
+  num:{fill:'#FFFFFF', outlines:[{c:'#A5ACAF', w:2.2}]}, name:{fill:'#FFFFFF', outlines:[{c:'#A5ACAF', w:.8}]},
+  stripes:{start:3, list:[{c:'#69BE28',w:3},{c:'body',w:2},{c:'#A5ACAF',w:2}]} };
+const STEELERS = { body:'#141414', collar:'#141414', trim:'#FFB612', font:'round', sx:.84,
+  num:{fill:'#FFFFFF'}, name:{fill:'#FFB612'},
+  stripes:{start:4, list:[{c:'#FFB612',w:5},{c:'#FFFFFF',w:1.5},{c:'body',w:2},{c:'#FFFFFF',w:1.5},{c:'#FFB612',w:5},{c:'#FFFFFF',w:1.5},{c:'body',w:2},{c:'#FFFFFF',w:1.5},{c:'#FFB612',w:5}]} };
+
+const P = [
+  { id:'tomlinson', first:'LaDainian', last:'Tomlinson', back:'TOMLINSON', num:'21', pos:'Running back', team:'San Diego Chargers', years:'2001–2009', nick:'LT',
+    college:'TCU', draft:'2001 · Rd 1, No. 5', kitName:'Powder blue alternate', ink:'#0A2342',
+    kit:{ body:'#6FA0D8', collar:'#D9CB9F', font:'cut', sx:.86,
+      num:{fill:'#FFFFFF', outlines:[{c:'#0A2342', w:2.6},{c:'#F2C230', w:3}]}, name:{fill:'#FFFFFF', outlines:[{c:'#0A2342', w:1.1}]},
+      bolt:{fill:'#F5C431', edges:['#FFFFFF','#0A2342']} },
+    stats:[['13,684','Rushing yards'],['145','Rushing TDs'],['162','Total TDs'],['31','TDs in 2006']],
+    facts:[
+      'Scored 31 touchdowns in 2006, the NFL single-season record, and was named MVP.',
+      'That same season also set the records for rushing touchdowns (28) and points scored (186).',
+      'Threw seven touchdown passes on halfback options over his career.',
+      'Shared the 2006 Walter Payton Man of the Year award with Drew Brees, his former Chargers teammate.'
+    ],
+    honors:['Hall of Fame, 2017','2006 NFL MVP','2× rushing champion','5× Pro Bowl'] },
+
+  { id:'forte', first:'Matt', last:'Forte', back:'FORTE', num:'22', pos:'Running back', team:'Chicago Bears', years:'2008–2015',
+    college:'Tulane', draft:'2008 · Rd 2, No. 44', kitName:'Navy home',
+    kit:{ body:'#0E1A30', collar:'#0E1A30', trim:'#C83803', font:'round', sx:.9,
+      num:{fill:'#FFFFFF', outlines:[{c:'#C83803', w:3.2}]}, name:{fill:'#FFFFFF'},
+      stripes:{start:5, list:[{c:'#FFFFFF',w:2},{c:'#C83803',w:5},{c:'#FFFFFF',w:2},{c:'body',w:3},{c:'#FFFFFF',w:2},{c:'#C83803',w:5},{c:'#FFFFFF',w:2}]} },
+    stats:[['9,796','Rushing yards'],['554','Receptions'],['102','Catches in 2014'],['8,602','Rush yards as a Bear']],
+    facts:[
+      'Caught 102 passes in 2014, the most ever by a running back at the time.',
+      'His 8,602 rushing yards in Chicago rank second in Bears history, behind only Walter Payton.',
+      'Ran for 1,238 yards as a rookie after the Bears took him in the second round out of Tulane.'
+    ],
+    honors:['2× Pro Bowl','No. 2 rusher in Bears history'] },
+
+  { id:'fitzgerald', first:'Larry', last:'Fitzgerald', back:'FITZGERALD', num:'11', pos:'Wide receiver', team:'Arizona Cardinals', years:'2004–2020', nick:'Fitz',
+    college:'Pittsburgh', draft:'2004 · Rd 1, No. 3', kitName:'Cardinal red home',
+    kit:{ body:'#9B2743', collar:'#141414', font:'cut', sx:.82,
+      num:{fill:'#FFFFFF', outlines:[{c:'#141414', w:3}]}, name:{fill:'#FFFFFF', outlines:[{c:'#141414', w:1.1}]},
+      swoosh:{c:'#FFFFFF', pipe:'#141414'}, sidePipe:'#141414' },
+    stats:[['1,432','Receptions'],['17,492','Receiving yards'],['121','Receiving TDs'],['11','Pro Bowls']],
+    facts:[
+      'Ranks second in NFL history in catches and receiving yards, behind only Jerry Rice.',
+      'Gained 546 receiving yards in the 2008 playoffs, a postseason record, and carried Arizona to Super Bowl XLIII.',
+      'Played all 17 seasons for the Cardinals. As a teenager he was a ball boy for the Minnesota Vikings.',
+      'Elected to the Hall of Fame in 2026, his first year of eligibility.'
+    ],
+    honors:['Hall of Fame, 2026','11× Pro Bowl','2016 Walter Payton Man of the Year'] },
+
+  { id:'brady', first:'Tom', last:'Brady', back:'BRADY', num:'12', pos:'Quarterback', team:'New England Patriots', years:'2000–2019', nick:'TB12',
+    college:'Michigan', draft:'2000 · Rd 6, No. 199', kitName:'Navy home',
+    kit:PATS,
+    stats:[['7','Super Bowl titles'],['89,214','Passing yards'],['649','Passing TDs'],['3','MVP awards']],
+    facts:[
+      'Went 199th overall in the 2000 draft, then won six Super Bowls in New England.',
+      'Threw 50 touchdown passes in 2007 as the Patriots went 16–0 in the regular season.',
+      'Retired as the NFL’s career leader in passing yards and touchdown passes.',
+      'The Patriots retired his No. 12 in 2024.'
+    ],
+    honors:['7× Super Bowl champion','5× Super Bowl MVP','3× NFL MVP','15× Pro Bowl'] },
+
+  { id:'peyton-manning', first:'Peyton', last:'Manning', back:'MANNING', num:'18', pos:'Quarterback', team:'Indianapolis Colts', years:'1998–2011', nick:'The Sheriff',
+    college:'Tennessee', draft:'1998 · Rd 1, No. 1', kitName:'Royal blue home',
+    kit:{ body:'#1F4F9F', collar:'#1F4F9F', trim:'#FFFFFF', font:'round', sx:.88,
+      num:{fill:'#FFFFFF'}, name:{fill:'#FFFFFF'}, shoulderStripes:'#FFFFFF' },
+    stats:[['5','MVP awards'],['71,940','Passing yards'],['539','Passing TDs'],['2','Super Bowl titles']],
+    facts:[
+      'Won a record five MVP awards, four of them with the Colts.',
+      'Threw 49 touchdown passes in 2004, breaking Dan Marino’s single-season record of 48.',
+      'Beat the Bears in Super Bowl XLI and was named the game’s MVP.',
+      'Taken first overall out of Tennessee in 1998.'
+    ],
+    honors:['Hall of Fame, 2021','5× NFL MVP','Super Bowl XLI MVP','14× Pro Bowl'] },
+
+  { id:'brees', first:'Drew', last:'Brees', back:'BREES', num:'9', pos:'Quarterback', team:'New Orleans Saints', years:'2006–2020',
+    college:'Purdue', draft:'2001 · Rd 2, No. 32', kitName:'Black home',
+    kit:{ body:'#151719', collar:'#CDB57F', font:'round', sx:.9,
+      num:{fill:'#CDB57F', outlines:[{c:'#FFFFFF', w:2}]}, name:{fill:'#CDB57F'}, fleur:'#CDB57F' },
+    stats:[['80,358','Passing yards'],['571','Passing TDs'],['7,142','Completions'],['54','Straight games, TD pass']],
+    facts:[
+      'Led the Saints to their first Super Bowl title in XLIV and was named the game’s MVP.',
+      'Threw a touchdown pass in 54 straight games, breaking Johnny Unitas’s record of 47.',
+      'Started his career in San Diego as LaDainian Tomlinson’s teammate before signing with New Orleans in 2006.',
+      'Enshrined in Canton with the Class of 2026.'
+    ],
+    honors:['Hall of Fame, 2026','Super Bowl XLIV MVP','13× Pro Bowl','2× Offensive Player of the Year'] },
+
+  { id:'jackson', first:'DeSean', last:'Jackson', back:'JACKSON', num:'10', pos:'Wide receiver', team:'Philadelphia Eagles', years:'2008–2013, 2019–2020', nick:'D-Jax',
+    college:'California', draft:'2008 · Rd 2, No. 49', kitName:'Midnight green home',
+    kit:EAGLES,
+    stats:[['641','Receptions'],['11,263','Receiving yards'],['58','Receiving TDs'],['26','TDs of 60+ yards']],
+    facts:[
+      'Returned a punt 65 yards for a touchdown as time expired at the Giants in December 2010. The Eagles had trailed 31–10 with under eight minutes left.',
+      'Holds the NFL record with 26 career touchdowns of 60 yards or more.',
+      'A second-round pick out of Cal in 2008, he made three Pro Bowls.'
+    ],
+    honors:['3× Pro Bowl','NFL record: 26 TDs of 60+ yards'] },
+
+  { id:'eli-manning', first:'Eli', last:'Manning', back:'MANNING', num:'10', pos:'Quarterback', team:'New York Giants', years:'2004–2019',
+    college:'Ole Miss', draft:'2004 · Rd 1, No. 1', kitName:'Dark blue home',
+    kit:{ body:'#1A3F92', collar:'#1A3F92', trim:'#C8102E', font:'round', sx:.92, num:{fill:'#FFFFFF'}, name:{fill:'#FFFFFF'} },
+    stats:[['2','Super Bowl MVPs'],['57,023','Passing yards'],['366','Passing TDs'],['210','Straight starts']],
+    facts:[
+      'Beat the Patriots in Super Bowls XLII and XLVI and was MVP of both. The first one ended New England’s bid for a 19–0 season.',
+      'Started 210 straight regular-season games, the third-longest streak for a quarterback.',
+      'The Chargers drafted him first overall in 2004 and traded him to New York the same day.',
+      'The Giants’ career leader in passing yards and touchdown passes.'
+    ],
+    honors:['2× Super Bowl MVP','4× Pro Bowl','2016 Walter Payton Man of the Year','No. 10 retired by the Giants'] },
+
+  { id:'smith', first:'Steve', last:'Smith Sr.', back:'SMITH', num:'89', pos:'Wide receiver', team:'Carolina Panthers', years:'2001–2013',
+    college:'Utah', draft:'2001 · Rd 3, No. 74', kitName:'Panther blue alternate', ink:'#0B1218',
+    kit:{ body:'#0097D7', collar:'#141414', font:'round', sx:.9,
+      num:{fill:'#FFFFFF', outlines:[{c:'#141414', w:3.4}]}, name:{fill:'#FFFFFF', outlines:[{c:'#141414', w:1.1}]},
+      stripes:{start:8, list:[{c:'#141414',w:3.5},{c:'body',w:3},{c:'#141414',w:3.5}]} },
+    stats:[['1,031','Receptions'],['14,731','Receiving yards'],['81','Receiving TDs'],['5','Pro Bowls']],
+    facts:[
+      'Won the 2005 receiving triple crown with 103 catches, 1,563 yards and 12 touchdowns.',
+      'Caught a 69-yard touchdown on the first play of double overtime to beat the Rams in the January 2004 playoffs.',
+      'Came back from a broken leg that wiped out his 2004 season to win 2005 Comeback Player of the Year.',
+      'The Panthers’ career leader in catches, receiving yards and receiving touchdowns.'
+    ],
+    honors:['5× Pro Bowl','2005 Comeback Player of the Year'] },
+
+  { id:'cutler', first:'Jay', last:'Cutler', back:'CUTLER', num:'6', pos:'Quarterback', team:'Denver Broncos', years:'2006–2008',
+    college:'Vanderbilt', draft:'2006 · Rd 1, No. 11', kitName:'Orange alternate', ink:'#0A2240',
+    kit:{ body:'#F65A1F', collar:'#0A2240', font:'cut', sx:.9,
+      num:{fill:'#FFFFFF', outlines:[{c:'#0A2240', w:3.2}]}, name:{fill:'#FFFFFF', outlines:[{c:'#0A2240', w:1.1}]},
+      sides:{c:'#0A2240', top:3, w:26, pipe:'#FFFFFF'}, under:'#0A2240' },
+    stats:[['35,133','Passing yards'],['227','Passing TDs'],['4,526','Yards in 2008'],['1','Pro Bowl']],
+    facts:[
+      'Threw for 4,526 yards in 2008, a Broncos single-season record at the time, and made the Pro Bowl.',
+      'Was diagnosed with type 1 diabetes in 2008 and still put up the best season of his career.',
+      'Traded to Chicago in 2009, he left as the Bears’ career leader in passing yards and touchdown passes.',
+      'Drafted 11th overall out of Vanderbilt in 2006.'
+    ],
+    honors:['2008 Pro Bowl','Bears career passing leader'] },
+
+  { id:'julio', first:'Julio', last:'Jones', back:'JONES', num:'11', pos:'Wide receiver', team:'Atlanta Falcons', years:'2011–2020',
+    college:'Alabama', draft:'2011 · Rd 1, No. 6', kitName:'Black home',
+    kit:{ body:'#161616', collar:'#161616', trim:'#A71930', font:'cut', sx:.8,
+      num:{fill:'#FFFFFF', outlines:[{c:'#A71930', w:3}]}, name:{fill:'#FFFFFF', outlines:[{c:'#A71930', w:1}]} },
+    stats:[['914','Receptions'],['13,703','Receiving yards'],['66','Receiving TDs'],['300','Yards in one game']],
+    facts:[
+      'Caught 12 passes for 300 yards against Carolina in October 2016.',
+      'Led the NFL in receiving yards in 2015 (1,871) and 2018 (1,677).',
+      'Atlanta traded five draft picks to move up and take him sixth overall in 2011.',
+      'The Falcons’ career leader in catches (848) and receiving yards (12,896).'
+    ],
+    honors:['7× Pro Bowl','2× first-team All-Pro','2× receiving yards leader'] },
+
+  { id:'peterson', first:'Adrian', last:'Peterson', back:'PETERSON', num:'28', pos:'Running back', team:'Minnesota Vikings', years:'2007–2016', nick:'All Day',
+    college:'Oklahoma', draft:'2007 · Rd 1, No. 7', kitName:'Purple home',
+    kit:{ body:'#4F2683', collar:'#FFC62F', font:'cut', sx:.88,
+      num:{fill:'#FFFFFF', outlines:[{c:'#FFC62F', w:3}]}, name:{fill:'#FFFFFF', outlines:[{c:'#FFC62F', w:.9}]},
+      horn:{c:'#FFFFFF', edge:'#FFC62F'}, sides:{c:'#FFFFFF', top:2, w:28, pipe:'#FFC62F'} },
+    stats:[['14,918','Rushing yards'],['120','Rushing TDs'],['2,097','Yards in 2012'],['296','Yards in one game']],
+    facts:[
+      'Ran for 296 yards against the Chargers as a rookie in 2007, still the NFL single-game record.',
+      'Tore his ACL in December 2011, then ran for 2,097 yards in 2012, nine short of Eric Dickerson’s record, and won MVP.',
+      'Ranks fifth on the NFL’s career rushing list.'
+    ],
+    honors:['2012 NFL MVP','2007 Offensive Rookie of the Year','3× rushing champion','7× Pro Bowl'] },
+
+  { id:'johnson', first:'Calvin', last:'Johnson', back:'JOHNSON', num:'81', pos:'Wide receiver', team:'Detroit Lions', years:'2007–2015', nick:'Megatron',
+    college:'Georgia Tech', draft:'2007 · Rd 1, No. 2', kitName:'Honolulu blue home', cardBg:'#1D64A8',
+    kit:{ body:'#2E7CC4', collar:'#141414', trim:'#FFFFFF', font:'round', sx:.86,
+      num:{fill:'#FFFFFF', outlines:[{c:'#141414', w:3}]}, name:{fill:'#FFFFFF', outlines:[{c:'#141414', w:1}]},
+      stripes:{start:6, list:[{c:'#141414',w:2},{c:'#FFFFFF',w:1.5},{c:'#B0B7BC',w:8},{c:'#FFFFFF',w:1.5},{c:'#141414',w:2}]} },
+    stats:[['731','Receptions'],['11,619','Receiving yards'],['83','Receiving TDs'],['1,964','Yards in 2012']],
+    facts:[
+      'Set the NFL single-season record with 1,964 receiving yards in 2012.',
+      'Had 329 receiving yards against Dallas in 2013, the second-most ever in a single game.',
+      'Retired at 30 after nine seasons, all in Detroit, as the Lions’ leader in receiving yards and touchdowns.',
+      'Inducted into the Hall of Fame in 2021.'
+    ],
+    honors:['Hall of Fame, 2021','6× Pro Bowl','3× first-team All-Pro'] },
+
+  { id:'gates', first:'Antonio', last:'Gates', back:'GATES', num:'85', pos:'Tight end', team:'San Diego / L.A. Chargers', years:'2003–2018',
+    college:'Kent State', draft:'Undrafted, 2003', kitName:'Navy home',
+    kit:CHARGERS_NAVY,
+    stats:[['116','Receiving TDs'],['955','Receptions'],['11,841','Receiving yards'],['8','Pro Bowls']],
+    facts:[
+      'Never played college football. He starred in basketball at Kent State, then signed with San Diego as an undrafted free agent.',
+      'His 116 touchdown catches are the most ever by a tight end.',
+      'Spent all 16 seasons with the Chargers and caught passes from both Drew Brees and Philip Rivers.',
+      'Inducted into the Hall of Fame in 2025.'
+    ],
+    honors:['Hall of Fame, 2025','8× Pro Bowl','Most TDs by a tight end'] },
+
+  { id:'lynch', first:'Marshawn', last:'Lynch', back:'LYNCH', num:'24', pos:'Running back', team:'Seattle Seahawks', years:'2010–2015, 2019', nick:'Beast Mode',
+    college:'California', draft:'2007 · Rd 1, No. 12', kitName:'College navy home',
+    kit:SEAHAWKS,
+    stats:[['10,413','Rushing yards'],['85','Rushing TDs'],['5','Pro Bowls'],['1','Super Bowl title']],
+    facts:[
+      'His 67-yard “Beast Quake” run against the Saints in the January 2011 playoffs registered on a seismic monitor near the stadium.',
+      'Ran for at least 1,200 yards in four straight seasons, 2011 through 2014.',
+      'Won Super Bowl XLVIII when Seattle beat Denver 43–8.',
+      'Came out of retirement in December 2019 to rejoin the Seahawks for their playoff run.'
+    ],
+    honors:['Super Bowl XLVIII champion','5× Pro Bowl'] },
+
+  { id:'moss', first:'Randy', last:'Moss', back:'MOSS', num:'81', pos:'Wide receiver', team:'New England Patriots', years:'2007–2010',
+    college:'Marshall', draft:'1998 · Rd 1, No. 21', kitName:'Navy home',
+    kit:PATS,
+    stats:[['156','Receiving TDs'],['15,292','Receiving yards'],['23','TD catches in 2007'],['6','Pro Bowls']],
+    facts:[
+      'Caught 23 of Tom Brady’s 50 touchdown passes in 2007, still the NFL single-season record for receivers.',
+      'His 156 career touchdown catches rank second all-time, behind Jerry Rice.',
+      'Set the rookie record with 17 touchdown catches for Minnesota in 1998.',
+      'Inducted into the Hall of Fame in 2018, his first year of eligibility.'
+    ],
+    honors:['Hall of Fame, 2018','1998 Offensive Rookie of the Year','6× Pro Bowl'] },
+
+  { id:'rivers', first:'Philip', last:'Rivers', back:'RIVERS', num:'17', pos:'Quarterback', team:'San Diego / L.A. Chargers', years:'2004–2019',
+    college:'NC State', draft:'2004 · Rd 1, No. 4', kitName:'Navy home',
+    kit:CHARGERS_NAVY,
+    stats:[['63,984','Passing yards'],['425','Passing TDs'],['240','Straight starts'],['8','Pro Bowls']],
+    facts:[
+      'The Giants drafted him fourth overall in 2004 and traded him to San Diego for Eli Manning the same day.',
+      'Started 240 straight regular-season games from 2006 to 2020, second only to Brett Favre among quarterbacks.',
+      'Played the 2007 AFC Championship Game at New England on a torn ACL.',
+      'Came out of retirement at 44 in December 2025 and made three starts for the Colts.'
+    ],
+    honors:['8× Pro Bowl','2013 Comeback Player of the Year'] },
+
+  { id:'roethlisberger', first:'Ben', last:'Roethlisberger', back:'ROETHLISBERGER', num:'7', pos:'Quarterback', team:'Pittsburgh Steelers', years:'2004–2021', nick:'Big Ben',
+    college:'Miami (Ohio)', draft:'2004 · Rd 1, No. 11', kitName:'Black home',
+    kit:STEELERS,
+    stats:[['2','Super Bowl titles'],['64,088','Passing yards'],['418','Passing TDs'],['165','Wins as a starter']],
+    facts:[
+      'Went 13–0 as a starter in his 2004 rookie season.',
+      'Beat Seattle in Super Bowl XL at 23, then the youngest quarterback to win a Super Bowl.',
+      'Hit Santonio Holmes for the winning touchdown with 35 seconds left in Super Bowl XLIII.',
+      'Played all 18 seasons in Pittsburgh and holds the Steelers’ records for passing yards and touchdowns.'
+    ],
+    honors:['2× Super Bowl champion','2004 Offensive Rookie of the Year','6× Pro Bowl'] },
+
+  { id:'owens', first:'Terrell', last:'Owens', back:'OWENS', num:'81', pos:'Wide receiver', team:'Dallas Cowboys', years:'2006–2008', nick:'T.O.',
+    college:'Chattanooga', draft:'1996 · Rd 3, No. 89', kitName:'Navy blue',
+    kit:{ body:'#15295B', collar:'#15295B', trim:'#FFFFFF', font:'round', sx:.9,
+      num:{fill:'#FFFFFF', outlines:[{c:'#8C9DB8', w:2.6}]}, name:{fill:'#FFFFFF', outlines:[{c:'#8C9DB8', w:.8}]},
+      stripes:{start:7, list:[{c:'#FFFFFF',w:3.5},{c:'body',w:3},{c:'#FFFFFF',w:3.5}]} },
+    stats:[['1,078','Receptions'],['15,934','Receiving yards'],['153','Receiving TDs'],['38','TD catches in Dallas']],
+    facts:[
+      'Ranks third in NFL history in both receiving yards and receiving touchdowns.',
+      'Caught 38 touchdown passes in three seasons with Dallas, including 15 in 2007.',
+      'Played Super Bowl XXXIX for the Eagles on a broken leg and caught nine passes for 122 yards.',
+      'Inducted into the Hall of Fame in 2018, alongside Randy Moss.'
+    ],
+    honors:['Hall of Fame, 2018','6× Pro Bowl','5× first-team All-Pro'] },
+
+  { id:'ochocinco', first:'Chad', last:'Johnson', back:'OCHOCINCO', num:'85', pos:'Wide receiver', team:'Cincinnati Bengals', years:'2001–2010', nick:'Ochocinco',
+    college:'Oregon State', draft:'2001 · Rd 2, No. 36', kitName:'Black home',
+    kit:{ body:'#141414', collar:'#FB4F14', font:'cut', sx:.86,
+      num:{fill:'#FFFFFF', outlines:[{c:'#FB4F14', w:3}]}, name:{fill:'#FFFFFF', outlines:[{c:'#FB4F14', w:1}]},
+      sleeve:'#FB4F14', tiger:'#141414', sides:{c:'#FB4F14', top:3, w:10, pipe:'#FFFFFF'} },
+    stats:[['766','Receptions'],['11,059','Receiving yards'],['67','Receiving TDs'],['6','Pro Bowls']],
+    facts:[
+      'The Bengals’ career leader in catches (751), receiving yards (10,783) and receiving touchdowns (66).',
+      'Topped 1,000 receiving yards in seven seasons, with a career high of 1,440 in 2007.',
+      'Legally changed his last name to Ochocinco, Spanish for his number, in 2008 and wore it on his jersey from 2009.',
+      'Once celebrated a touchdown by holding up a sign asking the NFL not to fine him again.'
+    ],
+    honors:['6× Pro Bowl','2006 receiving yards leader'] },
+
+  { id:'brown', first:'Antonio', last:'Brown', back:'BROWN', num:'84', pos:'Wide receiver', team:'Pittsburgh Steelers', years:'2010–2018', nick:'AB',
+    college:'Central Michigan', draft:'2010 · Rd 6, No. 195', kitName:'Black home',
+    kit:STEELERS,
+    stats:[['928','Receptions'],['12,291','Receiving yards'],['83','Receiving TDs'],['136','Catches in 2015']],
+    facts:[
+      'A sixth-round pick, he caught at least 100 passes in six straight seasons (2013–2018), an NFL record.',
+      'Had 136 catches for 1,834 yards in 2015.',
+      'Led the NFL in receiving yards in 2014 and 2017.'
+    ],
+    honors:['7× Pro Bowl','4× first-team All-Pro','2× receiving yards leader'] },
+
+  { id:'charles', first:'Jamaal', last:'Charles', back:'CHARLES', num:'25', pos:'Running back', team:'Kansas City Chiefs', years:'2008–2016',
+    college:'Texas', draft:'2008 · Rd 3, No. 73', kitName:'Red home',
+    kit:{ body:'#C1172F', collar:'#C1172F', trim:'#FFFFFF', font:'round', sx:.9,
+      num:{fill:'#FFFFFF', outlines:[{c:'#FFB81C', w:2.8}]}, name:{fill:'#FFFFFF', outlines:[{c:'#FFB81C', w:.9}]},
+      stripes:{start:6, list:[{c:'#FFFFFF',w:3},{c:'#FFB81C',w:4},{c:'#FFFFFF',w:3}]} },
+    stats:[['7,563','Rushing yards'],['5.4','Yards per carry'],['44','Rushing TDs'],['4','Pro Bowls']],
+    facts:[
+      'His 5.4 yards per carry is the best career average for a running back with at least 1,000 carries.',
+      'Ran for 1,509 yards in 2012, a year after tearing his ACL.',
+      'Scored five touchdowns, four of them on catches, at Oakland in December 2013.',
+      'The Chiefs’ career rushing leader with 7,260 yards.'
+    ],
+    honors:['4× Pro Bowl','Chiefs career rushing leader'] },
+
+  { id:'mccoy', first:'LeSean', last:'McCoy', back:'McCOY', num:'25', pos:'Running back', team:'Philadelphia Eagles', years:'2009–2014', nick:'Shady',
+    college:'Pittsburgh', draft:'2009 · Rd 2, No. 53', kitName:'Midnight green home',
+    kit:EAGLES,
+    stats:[['11,102','Rushing yards'],['73','Rushing TDs'],['1,607','Yards in 2013'],['6','Pro Bowls']],
+    facts:[
+      'Led the NFL with 1,607 rushing yards in 2013, the Eagles’ single-season record.',
+      'Ran for 217 yards in the snow against Detroit in December 2013.',
+      'Left Philadelphia as the Eagles’ career rushing leader.',
+      'Earned Super Bowl rings with Kansas City and Tampa Bay late in his career.'
+    ],
+    honors:['6× Pro Bowl','2013 rushing champion','2× first-team All-Pro'] },
+
+  { id:'foster', first:'Arian', last:'Foster', back:'FOSTER', num:'23', pos:'Running back', team:'Houston Texans', years:'2009–2015',
+    college:'Tennessee', draft:'Undrafted, 2009', kitName:'Battle red alternate',
+    kit:{ body:'#C8202F', collar:'#03202F', font:'cut', sx:.9,
+      num:{fill:'#FFFFFF', outlines:[{c:'#03202F', w:3}]}, name:{fill:'#FFFFFF', outlines:[{c:'#03202F', w:1}]},
+      armBand:{c:'#03202F', pipe:'#FFFFFF'} },
+    stats:[['6,527','Rushing yards'],['54','Rushing TDs'],['1,616','Yards in 2010'],['4','Pro Bowls']],
+    facts:[
+      'Went undrafted out of Tennessee, then led the NFL with 1,616 rushing yards and 16 rushing touchdowns in 2010.',
+      'Opened that 2010 season with 231 rushing yards against the Colts.',
+      'Left Houston as the Texans’ career leader in rushing yards (6,472) and rushing touchdowns.'
+    ],
+    honors:['4× Pro Bowl','2010 rushing champion','2010 first-team All-Pro'] },
+
+  { id:'gurley', first:'Todd', last:'Gurley', back:'GURLEY II', num:'30', pos:'Running back', team:'St. Louis / L.A. Rams', years:'2015–2019',
+    college:'Georgia', draft:'2015 · Rd 1, No. 10', kitName:'Navy home',
+    kit:{ body:'#13244A', collar:'#C9AF74', font:'round', sx:.88,
+      num:{fill:'#C9AF74', outlines:[{c:'#FFFFFF', w:1.6}]}, name:{fill:'#C9AF74'},
+      horn:{c:'#C9AF74', edge:'#FFFFFF', wide:true} },
+    stats:[['6,082','Rushing yards'],['67','Rushing TDs'],['79','Total TDs'],['21','TDs in 2018']],
+    facts:[
+      'Taken 10th overall in 2015 while still recovering from a torn ACL, then won Offensive Rookie of the Year.',
+      'Led the NFL with 19 touchdowns and 2,093 yards from scrimmage in 2017 and was named Offensive Player of the Year.',
+      'Scored 21 touchdowns in 2018 and helped the Rams reach Super Bowl LIII.'
+    ],
+    honors:['2017 Offensive Player of the Year','2015 Offensive Rookie of the Year','3× Pro Bowl','2× first-team All-Pro'] },
+
+  { id:'andre-johnson', first:'Andre', last:'Johnson', back:'A.JOHNSON', num:'80', pos:'Wide receiver', team:'Houston Texans', years:'2003–2014',
+    college:'Miami', draft:'2003 · Rd 1, No. 3', kitName:'Deep steel blue home',
+    kit:{ body:'#1C2B49', collar:'#C8102E', font:'cut', sx:.9,
+      num:{fill:'#FFFFFF', outlines:[{c:'#C8102E', w:3}]}, name:{fill:'#FFFFFF'}, insert:'#C8102E' },
+    stats:[['1,062','Receptions'],['14,185','Receiving yards'],['70','Receiving TDs'],['7','Pro Bowls']],
+    facts:[
+      'The first player who began his career with the Texans to reach the Hall of Fame, in the Class of 2024.',
+      'Holds Houston’s career records for catches (1,012), receiving yards (13,597) and touchdown catches (64).',
+      'Led the NFL with 115 catches and 1,575 yards in 2008, then led the league in yards again in 2009.',
+      'Taken third overall out of Miami in 2003.'
+    ],
+    honors:['Hall of Fame, 2024','7× Pro Bowl','2× first-team All-Pro'] },
+
+  { id:'nelson', first:'Jordy', last:'Nelson', back:'NELSON', num:'87', pos:'Wide receiver', team:'Green Bay Packers', years:'2008–2017',
+    college:'Kansas State', draft:'2008 · Rd 2, No. 36', kitName:'Green home',
+    kit:{ body:'#203731', collar:'#FFB612', font:'round', sx:.9,
+      num:{fill:'#FFFFFF'}, name:{fill:'#FFFFFF'},
+      stripes:{start:6, list:[{c:'#FFB612',w:4},{c:'#FFFFFF',w:3},{c:'#FFB612',w:4}]} },
+    stats:[['613','Receptions'],['8,587','Receiving yards'],['72','Receiving TDs'],['1,519','Yards in 2014']],
+    facts:[
+      'Set the Packers’ single-season record with 1,519 receiving yards in 2014.',
+      'Caught nine passes for 140 yards and a touchdown in Green Bay’s Super Bowl XLV win.',
+      'Missed 2015 with a torn ACL, then led the NFL with 14 touchdown catches in 2016 and won Comeback Player of the Year.'
+    ],
+    honors:['Super Bowl XLV champion','2016 Comeback Player of the Year','2014 Pro Bowl'] },
+
+  { id:'jones-drew', first:'Maurice', last:'Jones-Drew', back:'JONES-DREW', num:'32', pos:'Running back', team:'Jacksonville Jaguars', years:'2006–2013', nick:'MJD',
+    college:'UCLA', draft:'2006 · Rd 2, No. 60', kitName:'Teal home', cardBg:'#0E6F7C',
+    kit:{ body:'#1491A1', collar:'#141414', font:'cut', sx:.88,
+      num:{fill:'#FFFFFF', outlines:[{c:'#141414', w:2.6},{c:'#D7A22A', w:1.6}]}, name:{fill:'#FFFFFF', outlines:[{c:'#141414', w:1}]},
+      stripes:{start:2, list:[{c:'#141414',w:3},{c:'#D7A22A',w:2}]} },
+    stats:[['8,167','Rushing yards'],['68','Rushing TDs'],['1,606','Yards in 2011'],['3','Pro Bowls']],
+    facts:[
+      'Led the NFL with 1,606 rushing yards in 2011.',
+      'Holds the Jaguars’ record with 68 rushing touchdowns and ranks second in team rushing yards, behind Fred Taylor.',
+      'Listed at 5-foot-7, he was a second-round pick out of UCLA in 2006.'
+    ],
+    honors:['2011 rushing champion','2011 first-team All-Pro','3× Pro Bowl'] },
+
+  { id:'gore', first:'Frank', last:'Gore', back:'GORE', num:'21', pos:'Running back', team:'San Francisco 49ers', years:'2005–2014',
+    college:'Miami', draft:'2005 · Rd 3, No. 65', kitName:'Scarlet home',
+    kit:{ body:'#AA0000', collar:'#AA0000', trim:'#FFFFFF', font:'round', sx:.9,
+      num:{fill:'#FFFFFF', outlines:[{c:'#141414', w:1.6}]}, name:{fill:'#FFFFFF', outlines:[{c:'#141414', w:.6}]},
+      stripes:{start:6, list:[{c:'#FFFFFF',w:3},{c:'body',w:3},{c:'#FFFFFF',w:3},{c:'body',w:3},{c:'#FFFFFF',w:3}]} },
+    stats:[['16,000','Rushing yards'],['81','Rushing TDs'],['11,073','Rush yards as a 49er'],['5','Pro Bowls']],
+    facts:[
+      'Retired with exactly 16,000 rushing yards, third in NFL history.',
+      'The 49ers’ career rushing leader with 11,073 yards.',
+      'Came back from torn ACLs in both knees at Miami to become a third-round pick in 2005.',
+      'Played 16 seasons for five teams, then retired on a one-day contract with San Francisco.'
+    ],
+    honors:['5× Pro Bowl','49ers career rushing leader'] },
+
+  { id:'wilson', first:'Russell', last:'Wilson', back:'WILSON', num:'3', pos:'Quarterback', team:'Seattle Seahawks', years:'2012–2021', nick:'DangeRuss',
+    college:'Wisconsin', draft:'2012 · Rd 3, No. 75', kitName:'College navy home',
+    kit:SEAHAWKS,
+    stats:[['37,059','Pass yards in Seattle'],['292','TD passes in Seattle'],['104','Wins in Seattle'],['101.8','Passer rating in Seattle']],
+    facts:[
+      'A third-round pick in 2012, he started as a rookie and won Super Bowl XLVIII in his second season.',
+      'Left Seattle as the franchise leader in passing yards and touchdown passes.',
+      'Threw a career-high 40 touchdown passes in 2020.',
+      'Played minor league baseball in the Colorado Rockies system before committing to football.'
+    ],
+    honors:['Super Bowl XLVIII champion','2020 Walter Payton Man of the Year'] },
+
+  { id:'ryan', first:'Matt', last:'Ryan', back:'RYAN', num:'2', pos:'Quarterback', team:'Atlanta Falcons', years:'2008–2021', nick:'Matty Ice',
+    college:'Boston College', draft:'2008 · Rd 1, No. 3', kitName:'Red alternate',
+    kit:{ body:'#C9202F', collar:'#141414', font:'cut', sx:.8,
+      num:{fill:'#FFFFFF', outlines:[{c:'#141414', w:3}]}, name:{fill:'#FFFFFF', outlines:[{c:'#141414', w:1}]},
+      stripes:{start:0, list:[{c:'#141414',w:8},{c:'#FFFFFF',w:2}]}, sides:{c:'#141414', top:6, w:16, pipe:'#FFFFFF'} },
+    stats:[['62,792','Passing yards'],['381','Passing TDs'],['59,735','Yards as a Falcon'],['4','Pro Bowls']],
+    facts:[
+      'Won NFL MVP in 2016 and led Atlanta to Super Bowl LI.',
+      'Holds the Falcons’ career records for passing yards (59,735) and touchdown passes (367).',
+      'Taken third overall in 2008, he won Offensive Rookie of the Year.'
+    ],
+    honors:['2016 NFL MVP','2016 Offensive Player of the Year','2008 Offensive Rookie of the Year','4× Pro Bowl'] },
+
+  { id:'newton', first:'Cam', last:'Newton', back:'NEWTON', num:'1', pos:'Quarterback', team:'Carolina Panthers', years:'2011–2019, 2021', nick:'Superman',
+    college:'Auburn', draft:'2011 · Rd 1, No. 1', kitName:'Panther blue alternate', ink:'#0B1218',
+    kit:{ body:'#139BD8', collar:'#141414', font:'cut', sx:.9,
+      num:{fill:'#FFFFFF', outlines:[{c:'#141414', w:3.2}]}, name:{fill:'#FFFFFF', outlines:[{c:'#141414', w:1}]},
+      panel:{c:'#141414', pipe:'#FFFFFF'} },
+    stats:[['32,382','Passing yards'],['194','Passing TDs'],['75','Rushing TDs'],['5,628','Rushing yards']],
+    facts:[
+      'Won NFL MVP in 2015 with 35 touchdown passes and 10 rushing touchdowns, and led Carolina to Super Bowl 50.',
+      'His 75 rushing touchdowns were the most ever by a quarterback until Josh Allen passed him in 2025.',
+      'Won the Heisman Trophy and a national title at Auburn, then went first overall in 2011.',
+      'Threw for 4,051 yards as a rookie, a rookie record at the time.'
+    ],
+    honors:['2015 NFL MVP','2011 Offensive Rookie of the Year','3× Pro Bowl'] },
+
+  { id:'gronkowski', first:'Rob', last:'Gronkowski', back:'GRONKOWSKI', num:'87', pos:'Tight end', team:'New England Patriots', years:'2010–2018', nick:'Gronk',
+    college:'Arizona', draft:'2010 · Rd 2, No. 42', kitName:'White road', cardBg:'#E6E9EE', ink:'#0B1F3F',
+    kit:{ body:'#F3F4F6', collar:'#002244', font:'round', sx:.92,
+      num:{fill:'#002244', outlines:[{c:'#C8102E', w:2.6}]}, name:{fill:'#002244'},
+      panel:{c:'#002244', pipe:'#C8102E'}, sides:{c:'#002244', top:6, w:18, pipe:'#C8102E'} },
+    stats:[['92','Receiving TDs'],['9,286','Receiving yards'],['621','Receptions'],['4','Super Bowl titles']],
+    facts:[
+      'Caught 17 touchdown passes in 2011, a record for a tight end.',
+      'Holds the Patriots’ career record with 79 receiving touchdowns.',
+      'Won four Super Bowls, three with New England and one with Tampa Bay, all with Tom Brady.',
+      'Has the most catches (23) and receiving yards (297) by a tight end in Super Bowl history.'
+    ],
+    honors:['4× Super Bowl champion','4× first-team All-Pro','5× Pro Bowl','2014 Comeback Player of the Year'] },
+
+  { id:'graham', first:'Jimmy', last:'Graham', back:'GRAHAM', num:'80', pos:'Tight end', team:'New Orleans Saints', years:'2010–2014, 2023',
+    college:'Miami', draft:'2010 · Rd 3, No. 95', kitName:'Gold alternate (not worn in his seasons)', cardBg:'#CDB57F', ink:'#141414',
+    kit:{ body:'#CDB57F', collar:'#141414', font:'round', sx:.9,
+      num:{fill:'#141414', outlines:[{c:'#FFFFFF', w:2}]}, name:{fill:'#141414'}, fleur:'#141414' },
+    stats:[['719','Receptions'],['8,545','Receiving yards'],['89','Receiving TDs'],['5','Pro Bowls']],
+    facts:[
+      'Played four years of basketball at Miami and only one season of college football before the Saints drafted him.',
+      'Led the NFL with 16 touchdown catches in 2013.',
+      'His habit of dunking the ball over the crossbar after touchdowns led the NFL to ban the celebration in 2014.',
+      'Retired as a Saint in July 2025.'
+    ],
+    honors:['5× Pro Bowl','2013 first-team All-Pro'] },
+
+  { id:'portis', first:'Clinton', last:'Portis', back:'PORTIS', num:'26', pos:'Running back', team:'Washington Redskins', years:'2004–2010',
+    college:'Miami', draft:'2002 · Rd 2, No. 51', kitName:'Burgundy home',
+    kit:{ body:'#6F1A2C', collar:'#6F1A2C', trim:'#FFB612', font:'round', sx:.9,
+      num:{fill:'#FFFFFF', outlines:[{c:'#FFB612', w:2.6}]}, name:{fill:'#FFFFFF'},
+      stripes:{start:6, list:[{c:'#FFFFFF',w:2.5},{c:'#FFB612',w:5},{c:'#FFFFFF',w:2.5}]} },
+    stats:[['9,923','Rushing yards'],['75','Rushing TDs'],['6,824','Rush yards in Washington'],['1,516','Yards in 2005']],
+    facts:[
+      'Washington got him from Denver in 2004 in a trade for cornerback Champ Bailey.',
+      'Set the franchise single-season record with 1,516 rushing yards in 2005.',
+      'Finished second in team rushing history, 648 yards behind John Riggins.',
+      'Showed up to press conferences in costume as characters he invented.'
+    ],
+    honors:['2002 Offensive Rookie of the Year','2× Pro Bowl'] }
+];
+
+const TICKER = [
+  ['Tomlinson','31 TDs in 2006'], ['Moss','23 TD catches in 2007'], ['Johnson','1,964 rec yds in 2012'],
+  ['Peterson','296 yds in one game'], ['Brady','7 Super Bowl titles'], ['P. Manning','5 MVPs'],
+  ['Brees','54 straight games with a TD pass'], ['Fitzgerald','546 yds in the 2008 playoffs'],
+  ['Gates','116 TDs, most by a tight end'], ['Jackson','26 TDs of 60+ yds'], ['Jones','300 yds vs Carolina'],
+  ['E. Manning','2 Super Bowl MVPs'], ['Lynch','67-yd Beast Quake'], ['Smith','2005 triple crown'],
+  ['Forte','102 catches in 2014'], ['Cutler','4,526 yds in 2008'], ['Rivers','240 straight starts'],
+  ['Roethlisberger','2 Super Bowl titles'], ['Owens','153 receiving TDs'], ['Ochocinco','10,783 yds, a Bengals record'],
+  ['Brown','6 straight 100-catch seasons'], ['Charles','5.4 yds per carry'], ['McCoy','1,607 yds in 2013'],
+  ['Foster','1,616 yds in 2010'], ['Gurley','21 TDs in 2018'], ['A. Johnson','1,575 yds in 2008'],
+  ['Nelson','1,519 yds in 2014'], ['Jones-Drew','1,606 yds in 2011'], ['Gore','16,000 career rush yds'],
+  ['Wilson','292 TD passes in Seattle'], ['Ryan','2016 MVP'], ['Newton','75 rushing TDs'],
+  ['Gronkowski','17 TD catches in 2011'], ['Graham','16 TD catches in 2013'], ['Portis','1,516 yds in 2005']
+];
+
+/* ---------- Tackle-twill block numerals (100 units tall) ---------- */
+const DIG = {
+  '0':{w:56, d:'M16 0H40Q56 0 56 16V84Q56 100 40 100H16Q0 100 0 84V16Q0 0 16 0ZM20 17H36Q39 17 39 20V80Q39 83 36 83H20Q17 83 17 80V20Q17 17 20 17Z'},
+  '1':{w:34, d:'M12 0H34V100H17V22L0 28V13Z'},
+  '2':{w:56, d:'M0 30V16Q0 0 16 0H40Q56 0 56 16V40Q56 50 48 56L22 82H56V100H0V84L36 50Q39 47 39 42V20Q39 17 36 17H20Q17 17 17 20V30Z'},
+  '3':{w:56, d:'M0 30V16Q0 0 16 0H40Q56 0 56 16V38Q56 46 50 50Q56 54 56 62V84Q56 100 40 100H16Q0 100 0 84V70H17V80Q17 83 20 83H36Q39 83 39 80V62Q39 59 36 59H22V42H36Q39 42 39 39V20Q39 17 36 17H20Q17 17 17 20V30Z'},
+  '4':{w:58, d:'M28 0H50V60H58V76H50V100H33V76H0V61ZM33 60V32L18 60Z'},
+  '5':{w:56, d:'M2 0H54V17H19V38H40Q56 38 56 54V84Q56 100 40 100H16Q0 100 0 84V70H17V80Q17 83 20 83H36Q39 83 39 80V58Q39 55 36 55H2Z'},
+  '6':{w:56, d:'M56 30V16Q56 0 40 0H16Q0 0 0 16V84Q0 100 16 100H40Q56 100 56 84V56Q56 40 40 40H17V20Q17 17 20 17H36Q39 17 39 20V30ZM17 57H36Q39 57 39 60V80Q39 83 36 83H20Q17 83 17 80Z'},
+  '7':{w:56, d:'M0 0H56V18L30 100H11L37 17H0Z'},
+  '8':{w:56, d:'M16 0H40Q56 0 56 16V38Q56 46 50 50Q56 54 56 62V84Q56 100 40 100H16Q0 100 0 84V62Q0 54 6 50Q0 46 0 38V16Q0 0 16 0ZM20 17H36Q39 17 39 20V39Q39 42 36 42H20Q17 42 17 39V20Q17 17 20 17ZM20 58H36Q39 58 39 61V80Q39 83 36 83H20Q17 83 17 80V61Q17 58 20 58Z'},
+  '9':{w:56, d:'M0 70V84Q0 100 16 100H40Q56 100 56 84V16Q56 0 40 0H16Q0 0 0 16V44Q0 60 16 60H39V80Q39 83 36 83H20Q17 83 17 80V70ZM39 43H20Q17 43 17 40V20Q17 17 20 17H36Q39 17 39 20Z'}
+};
+const GAP = 7;
+
+// Digits as one reusable group; "cut" fonts swap the rounded corners for chamfers.
+function digitDefs(num, kit, id){
+  let x = 0, paths = '';
+  for (const ch of num){
+    const g = DIG[ch], d = kit.font === 'cut' ? g.d.replace(/Q(-?[\d.]+) (-?[\d.]+) /g, 'L') : g.d;
+    paths += `<path transform="translate(${x} 0)" d="${d}"/>`;
+    x += g.w + GAP;
+  }
+  return { defs:`<g id="${id}" fill-rule="evenodd">${paths}</g>`, w:x - GAP };
+}
+// Stack the outlines outermost-first, then the fill, like layered tackle twill.
+function numberUse(id, w, kit, { h, cx, top, os = 1 }){
+  const s = h / 100, sx = kit.sx || .9, outs = kit.num.outlines || [];
+  const join = kit.font === 'cut' ? 'stroke-linejoin="miter" stroke-miterlimit="3"' : 'stroke-linejoin="round"';
+  let total = outs.reduce((a, o) => a + o.w, 0) * os / s * .55, layers = '';
+  for (let k = outs.length - 1; k >= 0; k--){
+    layers += `<use href="#${id}" fill="${outs[k].c}" stroke="${outs[k].c}" stroke-width="${(2 * total).toFixed(2)}" ${join}/>`;
+    total -= outs[k].w * os / s * .55;
+  }
+  layers += `<use href="#${id}" fill="${kit.num.fill}"/>`;
+  return `<g transform="translate(${(cx - w * s * sx / 2).toFixed(2)} ${top}) scale(${(s * sx).toFixed(4)} ${s})">${layers}</g>`;
+}
+
+const BODY = 'M92 35Q120 47 148 35L196 52Q214 58 222 72L232 112L198 126L190 110Q192 170 194 230Q120 240 46 230Q48 170 50 110L42 126L8 112L18 72Q26 58 44 52Z';
+const SLV_R = 'M196 52Q214 58 222 72L232 112L198 126L190 110Z';
+const SLV_L = 'M44 52Q26 58 18 72L8 112L42 126L50 110Z';
+const BOLT = '0,0 40,4 37,9 76,10 33,16 36,11 0,8';
+const FLEUR = '<path d="M0-16C5-10 6-3 2 4H-2C-6-3-5-10 0-16Z"/><path d="M-3 3C-9-1-15 3-13 9C-12 5-8 4-5 7Z"/><path d="M3 3C9-1 15 3 13 9C12 5 8 4 5 7Z"/><rect x="-8" y="5" width="16" height="3" rx="1"/><path d="M-2 8H2L1 15H-1Z"/>';
+const NAME_FONT = "Oswald, 'Arial Narrow', 'Helvetica Neue', sans-serif";
+
+function tone(hex, f){
+  const n = parseInt(hex.slice(1), 16), t = f < 0 ? 0 : 255, a = Math.abs(f);
+  return `rgb(${[n >> 16, n >> 8 & 255, n & 255].map(v => Math.round(v + (t - v) * a)).join(',')})`;
+}
+const col = (k, c) => c === 'body' ? k.body : c;
+const boltMarkup = b => `<polygon points="${BOLT}" fill="${b.edges[1]}" stroke="${b.edges[1]}" stroke-width="5.5" stroke-linejoin="round"/>
+  <polygon points="${BOLT}" fill="${b.edges[0]}" stroke="${b.edges[0]}" stroke-width="2.6" stroke-linejoin="round"/><polygon points="${BOLT}" fill="${b.fill}"/>`;
+// The crossbar runs through y 1.9–14.1. The hook climbs in front of it, wraps over the top
+// and drops down behind, so only the front stem and the loop over the top are drawn.
+const hook = cx => {
+  // Wire center sits one wire-radius above the bar's top edge, so the loop rests on it.
+  // Seen nearly edge-on, so the loop over the top is only a narrow cap.
+  const d = `M${cx} 22V3.2C${cx} 1.3 ${cx + .7} .45 ${cx + 1.75} .45C${cx + 2.8} .45 ${cx + 3.5} 1.3 ${cx + 3.5} 2.8`;
+  return `
+  <rect x="${cx + 1.4}" y="2.2" width="2.4" height="11.6" fill="#000" fill-opacity=".18"/>
+  <ellipse cx="${cx + 1.75}" cy="2.5" rx="3.6" ry="1.2" fill="#000" fill-opacity=".34"/>
+  <path d="${d}" fill="none" stroke="#4F555D" stroke-width="2.9" stroke-linecap="round"/>
+  <path d="${d}" fill="none" stroke="#C9CED4" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M${cx - .45} 20V3.2C${cx - .45} 1.4 ${cx + .4} .05 ${cx + 1.6} -.1" fill="none" stroke="#fff" stroke-opacity=".75" stroke-width=".6" stroke-linecap="round"/>`;
+};
+
+function nameText(p, k, y){
+  const n = k.name, outs = n.outlines || [];
+  const fit = p.back.length >= 9 ? `textLength="${Math.min(110, p.back.length * 11.4)}" lengthAdjust="spacingAndGlyphs"` : '';
+  const base = `x="120" y="${y}" text-anchor="middle" font-family="${NAME_FONT}" font-weight="600" font-size="18" letter-spacing="1.2" ${fit}`;
+  let total = outs.reduce((a, o) => a + o.w, 0), out = '';
+  for (let j = outs.length - 1; j >= 0; j--){
+    out += `<text ${base} fill="${outs[j].c}" stroke="${outs[j].c}" stroke-width="${2 * total}" stroke-linejoin="round">${p.back}</text>`;
+    total -= outs[j].w;
+  }
+  return out + `<text ${base} fill="${n.fill}">${p.back}</text>`;
+}
+
+/* ---------- Back view: the jersey turned to face you ---------- */
+function backSVG(p, i){
+  const k = p.kit, u = 'b' + i;
+  // Bands parallel to the right cuff; the whole right-side group is mirrored for the left.
+  const band = (c, w, color) => `<line x1="180" y1="${133.4 - c}" x2="242" y2="${108 - c}" stroke="${color}" stroke-width="${w}"/>`;
+  let sleeve = k.sleeve ? `<path d="${SLV_R}" fill="${k.sleeve}"/>` : '', deco = '';
+  if (k.stripes){ let d = k.stripes.start; for (const s of k.stripes.list){ sleeve += band(d + s.w / 2, s.w, col(k, s.c)); d += s.w; } }
+  if (k.tiger) sleeve += `<path d="M198 56Q212 62 221 60Q213 67 198 62ZM194 72Q213 79 228 76Q213 86 194 78ZM192 90Q210 96 231 94Q211 104 192 96ZM212 116Q222 110 234 110Q224 118 212 120Z" fill="${k.tiger}"/>`;
+  if (k.armBand) sleeve += `<line x1="205" y1="44" x2="197" y2="124" stroke="${k.armBand.pipe}" stroke-width="15"/><line x1="205" y1="44" x2="197" y2="124" stroke="${k.armBand.c}" stroke-width="11"/>`;
+  if (k.under) sleeve += `<line x1="184" y1="98" x2="206" y2="132" stroke="${k.under}" stroke-width="15"/>`;
+  if (k.swoosh) sleeve += `<polygon points="238,116 196,132 188,110 232,92" fill="${k.swoosh.c}"/><line x1="188" y1="110" x2="232" y2="92" stroke="${k.swoosh.pipe}" stroke-width="2.2"/>`;
+  if (k.shoulderStripes) [8, 17].forEach(o => sleeve += `<line x1="${197 + o}" y1="46" x2="${189 + o}" y2="122" stroke="${k.shoulderStripes}" stroke-width="5"/>`);
+  if (k.fleur) sleeve += `<g transform="translate(213 92) rotate(-18) scale(.62)" fill="${k.fleur}">${FLEUR}</g>`;
+
+  if (k.sides){
+    const s = k.sides, xi = 190 - s.top, xb = 194 - s.w, cxp = (xi + xb) / 2 - 3;
+    deco += `<path d="M190 108Q192 170 195 236L${xb} 238Q${cxp} 170 ${xi} 110Z" fill="${s.c}"/>`;
+    if (s.pipe) deco += `<path d="M${xi} 110Q${cxp} 170 ${xb} 238" stroke="${s.pipe}" stroke-width="2" fill="none"/>`;
+  }
+  if (k.sidePipe) deco += `<path d="M187 114Q186 172 189 236" stroke="${k.sidePipe}" stroke-width="2.2" fill="none"/>`;
+  if (k.insert) deco += `<path d="M172 44L196 52Q189 74 190 96H177Q178 70 172 44Z" fill="${k.insert}"/>`;
+  if (k.panel) deco += `<polygon points="184,49 197,52 214,58 222,72 229,94 190,69" fill="${k.panel.c}"/><line x1="190" y1="69" x2="229" y2="94" stroke="${k.panel.pipe}" stroke-width="2.4"/>`;
+  // Horns start out at the shoulder so the nameplate keeps clear space around it.
+  if (k.horn) deco += `<path d="${k.horn.wide ? 'M178 49Q216 55 233 104Q206 80 180 65Z' : 'M186 57Q215 64 233 110Q207 80 186 67Z'}" fill="${k.horn.c}" stroke="${k.horn.edge}" stroke-width="1.6"/>`;
+  if (k.bolt) deco += `<g transform="translate(184 64) rotate(30) scale(.68)">${boltMarkup(k.bolt)}</g>`;
+
+  const dg = digitDefs(p.num, k, u + 'n');
+
+  return `<svg viewBox="0 -6 240 256" aria-hidden="true" focusable="false">
+    <defs>
+      <clipPath id="${u}b"><path d="${BODY}"/></clipPath>
+      <clipPath id="${u}r"><path d="${SLV_R}"/></clipPath>
+      <linearGradient id="${u}h" x1="0" x2="1">
+        <stop offset="0" stop-opacity=".34"/><stop offset=".1" stop-opacity=".1"/><stop offset=".2" stop-color="#fff" stop-opacity=".05"/>
+        <stop offset=".32" stop-opacity=".1"/><stop offset=".46" stop-color="#fff" stop-opacity=".08"/><stop offset=".58" stop-opacity="0"/>
+        <stop offset=".7" stop-opacity=".1"/><stop offset=".82" stop-color="#fff" stop-opacity=".04"/><stop offset=".92" stop-opacity=".12"/><stop offset="1" stop-opacity=".36"/>
+      </linearGradient>
+      <linearGradient id="${u}v" x1="0" x2="0" y1="0" y2="1">
+        <stop offset="0" stop-color="#fff" stop-opacity=".12"/><stop offset=".3" stop-color="#fff" stop-opacity="0"/><stop offset=".85" stop-opacity=".08"/><stop offset="1" stop-opacity=".24"/>
+      </linearGradient>
+      <linearGradient id="${u}s" x1="0" x2="0" y1="0" y2="1">
+        <stop offset="0" stop-color="#fff" stop-opacity=".14"/><stop offset=".55" stop-opacity="0"/><stop offset="1" stop-opacity=".22"/>
+      </linearGradient>
+      <pattern id="${u}m" width="3.6" height="3.6" patternUnits="userSpaceOnUse"><circle cx="1.8" cy="1.8" r=".7" fill="#000" fill-opacity=".2"/></pattern>
+      ${dg.defs}
+      <g id="${u}dr">
+        <g clip-path="url(#${u}r)">${sleeve}</g>
+        ${deco}
+        <path d="${SLV_R}" fill="url(#${u}s)"/>
+        <path d="M196 52Q187 80 190 110" fill="none" stroke="#000" stroke-opacity=".3" stroke-width="1.1"/>
+        <path d="M148 35L196 52" fill="none" stroke="#000" stroke-opacity=".22" stroke-width="1"/>
+      </g>
+    </defs>
+    <path d="M94 30Q120 15 146 30L148 35Q120 47 92 35Z" fill="${tone(k.body, -.6)}"/>
+    <rect x="101" y="25" width="38" height="5.5" rx="2.75" fill="#8A5A2E"/>
+    ${hook(120)}
+    <rect x="116" y="20" width="8" height="12" rx="2" fill="#9B6838"/>
+    <path d="${BODY}" fill="${k.body}"/>
+    <g clip-path="url(#${u}b)">
+      <use href="#${u}dr"/>
+      <use href="#${u}dr" transform="matrix(-1 0 0 1 240 0)"/>
+      <rect x="40" y="95" width="160" height="150" fill="url(#${u}m)"/>
+      <path d="M50 95Q120 92 190 95" fill="none" stroke="#000" stroke-opacity=".28" stroke-width="1.1"/>
+      <path d="M50 96.6Q120 93.6 190 96.6" fill="none" stroke="#fff" stroke-opacity=".08" stroke-width="1"/>
+    </g>
+    ${nameText(p, k, 82)}
+    ${numberUse(u + 'n', dg.w, k, { h:88, cx:120, top:98 })}
+    <g clip-path="url(#${u}b)" fill="none" stroke-linecap="round">
+      <path d="M104 104Q99 168 106 232" stroke="#fff" stroke-opacity=".05" stroke-width="16"/>
+      <path d="M44 231Q120 241 196 231" stroke="#000" stroke-opacity=".25" stroke-width="3"/>
+    </g>
+    <path d="${BODY}" fill="url(#${u}h)"/>
+    <path d="${BODY}" fill="url(#${u}v)"/>
+    <path d="M92 35Q120 47 148 35L146 29.5Q120 40.5 94 29.5Z" fill="${k.collar}"/>
+    ${k.trim ? `<path d="M93 33.2Q120 44.2 147 33.2" fill="none" stroke="${k.trim}" stroke-width="1.3"/>` : ''}
+    <path d="M92 35Q120 47 148 35" fill="none" stroke="#000" stroke-opacity=".25" stroke-width="1"/>
+  </svg>`;
+}
+
+/* ---------- Side view: hanging on the rack, sleeve toward you ---------- */
+function sideSVG(p, i){
+  const k = p.kit, u = 's' + i;
+  const SL = 'M27 42Q40 33 53 42L63 120Q40 130 17 120Z';
+  const PROF = 'M33 36Q40 31 47 36Q53 80 55 120Q59 180 61 230Q40 238 19 230Q21 180 25 120Q27 80 33 36Z';
+  const band = (c, w, color) => `<path d="M8 ${120 - c}Q40 ${131 - c} 72 ${120 - c}" stroke="${color}" stroke-width="${w}" fill="none"/>`;
+  let sleeve = '', bodyDeco = '';
+  if (k.stripes){ let d = k.stripes.start; for (const s of k.stripes.list){ sleeve += band(d + s.w / 2, s.w, col(k, s.c)); d += s.w; } }
+  if (k.under) sleeve += band(3, 6, k.under);
+  if (k.tiger) sleeve += `<path d="M16 56Q40 50 64 58Q40 61 16 61ZM15 76Q42 70 65 79Q42 83 15 82ZM14 96Q40 90 66 99Q40 103 14 102Z" fill="${k.tiger}"/>`;
+  if (k.armBand) sleeve += `<path d="M12 60Q40 46 68 60" stroke="${k.armBand.pipe}" stroke-width="13" fill="none"/><path d="M12 60Q40 46 68 60" stroke="${k.armBand.c}" stroke-width="10" fill="none"/>`;
+  if (k.swoosh) sleeve += `<path d="M8 121Q40 131 72 106L72 96Q40 118 8 109Z" fill="${k.swoosh.c}"/><path d="M8 109Q40 118 72 96" stroke="${k.swoosh.pipe}" stroke-width="2" fill="none"/>`;
+  if (k.panel) sleeve += `<path d="M18 40Q40 30 62 40L58 62Q40 53 22 62Z" fill="${k.panel.c}"/><path d="M22 62Q40 53 58 62" stroke="${k.panel.pipe}" stroke-width="2.4" fill="none"/>`;
+  if (k.shoulderStripes) [9, 18].forEach(o => sleeve += `<path d="M12 ${52 + o}Q40 ${38 + o} 68 ${52 + o}" stroke="${k.shoulderStripes}" stroke-width="5" fill="none"/>`);
+  if (k.horn) sleeve += `<path d="M26 39Q50 60 62 118Q44 68 21 48Z" fill="${k.horn.c}" stroke="${k.horn.edge}" stroke-width="1.5"/>`;
+  if (k.bolt) sleeve += `<g transform="translate(23 44) rotate(60) scale(.9)">${boltMarkup(k.bolt)}</g>`;
+  if (k.fleur) sleeve += `<g transform="translate(40 98) scale(.85)" fill="${k.fleur}">${FLEUR}</g>`;
+
+  if (k.sides){
+    const s = k.sides, half = 3 + s.w * .18;
+    bodyDeco += `<path d="M37 112H43L${40 + half} 236H${40 - half}Z" fill="${s.c}"/>`;
+    if (s.pipe) bodyDeco += `<path d="M37 112L${40 - half} 236M43 112L${40 + half} 236" stroke="${s.pipe}" stroke-width="1.6"/>`;
+  }
+  if (k.sidePipe) bodyDeco += `<path d="M40 114V236" stroke="${k.sidePipe}" stroke-width="2"/>`;
+
+  let tv = '';
+  if (!k.bolt && !k.tiger){
+    const dg = digitDefs(p.num, k, u + 'n');
+    const h = k.fleur ? 15 : 20, cy = k.fleur ? 62 : k.shoulderStripes ? 92 : k.panel || k.armBand ? 84 : k.horn ? 86 : 74;
+    tv = `<defs>${dg.defs}</defs>${numberUse(u + 'n', dg.w, k, { h, cx:40, top:cy - h / 2, os:.5 })}`;
+  }
+
+  return `<svg viewBox="0 -6 80 256" aria-hidden="true" focusable="false">
+    <defs>
+      <clipPath id="${u}p"><path d="${PROF}"/></clipPath>
+      <clipPath id="${u}q"><path d="${SL}"/></clipPath>
+      <linearGradient id="${u}h" x1="0" x2="1">
+        <stop offset="0" stop-opacity=".42"/><stop offset=".35" stop-opacity=".08"/><stop offset=".55" stop-color="#fff" stop-opacity=".07"/><stop offset="1" stop-opacity=".3"/>
+      </linearGradient>
+      <linearGradient id="${u}g" x1="0" x2="1" y1="0" y2="1">
+        <stop offset="0" stop-color="#fff" stop-opacity=".16"/><stop offset=".5" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-opacity=".22"/>
+      </linearGradient>
+    </defs>
+    ${hook(40)}
+    <rect x="36" y="22" width="8" height="15" rx="2" fill="#9B6838"/>
+    <path d="${PROF}" fill="${k.body}"/>
+    <g clip-path="url(#${u}p)">${bodyDeco}</g>
+    <path d="${PROF}" fill="url(#${u}h)"/>
+    <path d="${SL}" fill="${k.sleeve || tone(k.body, .04)}"/>
+    <g clip-path="url(#${u}q)">${sleeve}${tv}</g>
+    <path d="${SL}" fill="url(#${u}g)"/>
+    <path d="${SL}" fill="none" stroke="#000" stroke-opacity=".28" stroke-width=".9"/>
+    <path d="M33 36Q40 31 47 36L46 41Q40 36.5 34 41Z" fill="${k.collar}"/>
+  </svg>`;
+}
+
+/* ---------- Build ---------- */
+const N = P.length;
+const rack = document.getElementById('rack');
+const track = document.getElementById('track');
+const card = document.getElementById('card');
+const facts = document.getElementById('facts');
+const nowName = document.getElementById('now-name');
+const nowMeta = document.getElementById('now-meta');
+const reduce = matchMedia('(prefers-reduced-motion: reduce)');
+
+rack.innerHTML = P.map((p, i) => `
+  <button class="slot" type="button" role="tab" id="tab-${p.id}" aria-controls="facts" aria-selected="false" tabindex="-1"
+    aria-label="${p.first} ${p.last}, number ${p.num}, ${p.team}">
+    <span class="face side">${sideSVG(p, i)}</span><span class="face back">${backSVG(p, i)}</span>
+  </button>`).join('');
+const slots = [...rack.children];
+
+// Yard numbers straddle their lines; arrows point to the nearer goal line
+const field = document.getElementById('field');
+[10, 20, 30, 40, 50, 40, 30, 20, 10].forEach((n, j) => {
+  const el = document.createElement('div');
+  el.className = 'yard';
+  el.style.left = (241 + j * 160) + 'px';
+  if (j !== 4) el.dataset.dir = j < 4 ? 'l' : 'r';
+  el.innerHTML = String(n).split('').map(d => `<span>${d}</span>`).join('');
+  field.appendChild(el);
+});
+
+const tick = TICKER.map(([who, what]) => `<span><b>${who}</b>${what}</span>`).join('');
+document.getElementById('ticker').innerHTML = tick + tick.replace(/<span>/g, '<span aria-hidden="true">');
+
+let cur = 0;
+
+function renderCard(p){
+  const k = p.kit, dg = digitDefs(p.num, k, 'cardnum');
+  const pad = 6, w = dg.w * (k.sx || .9) + pad * 2;
+  facts.style.setProperty('--team', p.cardBg || k.body);
+  facts.style.setProperty('--ink', p.ink || '#FFFFFF');
+  facts.style.setProperty('--team-line', `color-mix(in oklab, ${k.body} 78%, var(--fg))`);
+  facts.setAttribute('aria-labelledby', 'tab-' + p.id);
+  card.innerHTML = `
+    <header class="card-head">
+      <svg class="card-num" viewBox="0 0 ${w.toFixed(1)} 112" aria-hidden="true">
+        <defs>${dg.defs}</defs>${numberUse('cardnum', dg.w, k, { h:100, cx:w / 2, top:6, os:1.6 })}
+      </svg>
+      <div class="card-id">
+        <p class="eyebrow">${p.pos} · ${p.team} · ${p.years}</p>
+        <h2 class="card-name">${p.first} ${p.last}</h2>
+        ${p.nick ? `<p class="nick">“${p.nick}”</p>` : ''}
+      </div>
+      <dl class="bio">
+        <div><dt>College</dt><dd>${p.college}</dd></div>
+        <div><dt>Drafted</dt><dd>${p.draft}</dd></div>
+        <div><dt>Jersey</dt><dd>#${p.num} · ${p.kitName}</dd></div>
+      </dl>
+    </header>
+    <div class="stats">${p.stats.map(([v, l]) => `<div class="stat"><b>${v}</b><span>${l}</span></div>`).join('')}</div>
+    <div class="card-body">
+      <div><h3>Highlights</h3><ul class="hl">${p.facts.map(f => `<li>${f}</li>`).join('')}</ul></div>
+      <div><h3>Honors</h3><ul class="chips">${p.honors.map(h => `<li class="chip${/^Hall of Fame/.test(h) ? ' hof' : ''}">${h}</li>`).join('')}</ul></div>
+    </div>`;
+  card.style.animation = 'none'; void card.offsetWidth; card.style.animation = '';
+}
+
+function center(i, smooth){
+  const jw = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--jw'));
+  const C = jw * .19, O = jw + 14;
+  const pad = parseFloat(getComputedStyle(rack).paddingLeft);
+  const total = pad * 2 + (N - 1) * C + O, W = track.clientWidth;
+  const x = total <= W ? 0 : Math.max(0, Math.min(pad + i * C + O / 2 - W / 2, total - W));
+  track.scrollTo({ left: x, behavior: smooth && !reduce.matches ? 'smooth' : 'auto' });
+}
+
+function select(i, { focus = false, smooth = true } = {}){
+  cur = (i + N) % N;
+  slots.forEach((s, j) => {
+    const on = j === cur;
+    s.setAttribute('aria-selected', on);
+    s.tabIndex = on ? 0 : -1;
+    s.classList.toggle('is-before', j < cur);
+    s.classList.toggle('is-after', j > cur);
+    s.style.zIndex = on ? 200 : 100 - Math.abs(j - cur);
+  });
+  const p = P[cur];
+  nowName.textContent = `${p.first} ${p.last}`;
+  nowMeta.textContent = `#${p.num} · ${p.team} · ${String(cur + 1).padStart(2, '0')} / ${N}`;
+  renderCard(p);
+  if (focus) slots[cur].focus({ preventScroll: true });
+  center(cur, smooth);
+}
+
+slots.forEach((s, i) => s.addEventListener('click', () => { if (i !== cur) select(i); }));
+rack.addEventListener('keydown', e => {
+  const map = { ArrowRight: cur + 1, ArrowLeft: cur - 1, Home: 0, End: N - 1 };
+  if (e.key in map){ e.preventDefault(); select(map[e.key], { focus: true }); }
+});
+document.getElementById('prev').addEventListener('click', () => select(cur - 1));
+document.getElementById('next').addEventListener('click', () => select(cur + 1));
+addEventListener('resize', () => center(cur, false));
+
+let start = 0;
+try { const h = location.hash.slice(1); const f = P.findIndex(p => p.id === h); if (f >= 0) start = f; } catch (e) {}
+select(start, { smooth: false });
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => center(cur, false));
+</script>
+</body>
+</html>

@@ -211,10 +211,10 @@ button{font:inherit; color:inherit}
   .sub{font-size:14px; letter-spacing:.03em}
   .kicker{font-size:11.5px; letter-spacing:.2em}
 
-  /* rack: the picked jersey sits at the left edge, the rest trail off to the right */
+  /* rack: the picked jersey sits left of center, with jerseys hanging on both sides */
   .rack-inner{padding-inline:4px 24px}
-  .track{-webkit-mask-image:linear-gradient(90deg, #000 calc(100% - 30px), transparent);
-          mask-image:linear-gradient(90deg, #000 calc(100% - 30px), transparent)}
+  .track{-webkit-mask-image:linear-gradient(90deg, transparent, #000 20px, #000 calc(100% - 30px), transparent);
+          mask-image:linear-gradient(90deg, transparent, #000 20px, #000 calc(100% - 30px), transparent)}
   .controls{gap:8px}
   .pill{padding:8px 12px; font-size:12.5px; letter-spacing:.1em}
   .now-name{font-size:18px}
@@ -1276,8 +1276,8 @@ function center(i, smooth){
   const C = jw * .19, O = jw + 14;
   const pad = parseFloat(getComputedStyle(rack).paddingLeft);
   const total = pad * 2 + (N - 1) * C + O, W = track.clientWidth;
-  // desktop centers the pick; phones park it at the left edge with a sliver of the previous jersey
-  const want = phone.matches ? pad + i * C - C * .6 : pad + i * C + O / 2 - W / 2;
+  // desktop centers the pick; phones keep it left of center with a couple of jerseys before it
+  const want = phone.matches ? pad + i * C - C * 2.3 : pad + i * C + O / 2 - W / 2;
   const x = total <= W ? 0 : Math.max(0, Math.min(want, total - W));
   track.scrollTo({ left: x, behavior: smooth && !reduce.matches ? 'smooth' : 'auto' });
 }
@@ -1309,7 +1309,8 @@ document.getElementById('prev').addEventListener('click', () => select(cur - 1))
 document.getElementById('next').addEventListener('click', () => select(cur + 1));
 addEventListener('resize', () => center(cur, false));
 
-let start = 0;
+// Phones open on No. 07 so the turned jersey has others hanging on both sides
+let start = phone.matches ? 6 : 0;
 try { const h = location.hash.slice(1); const f = P.findIndex(p => p.id === h); if (f >= 0) start = f; } catch (e) {}
 select(start, { smooth: false });
 if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => center(cur, false));
